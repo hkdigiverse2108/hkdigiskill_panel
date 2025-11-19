@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:hkdigiskill_admin/common/widgets/breadcrumbs/breadcrumb_with_heading.dart';
 import 'package:hkdigiskill_admin/common/widgets/containers/rounded_container.dart';
 import 'package:hkdigiskill_admin/common/widgets/data_table/table_header.dart';
+import 'package:hkdigiskill_admin/routes/routes.dart';
 import 'package:hkdigiskill_admin/screens/workshop/all_workshop/controllers/workshop_controller.dart';
 import 'package:hkdigiskill_admin/screens/workshop/all_workshop/table/data_table.dart';
 import 'package:hkdigiskill_admin/utils/constants/colors.dart';
@@ -46,7 +48,7 @@ class WorkshopDesktopScreen extends StatelessWidget {
                   // Table Header with Create Button
                   AdminTableHeader(
                     buttonText: "Create Workshop",
-                    onPressed: () {},
+                    onPressed: () => Get.toNamed(AdminRoutes.createWorkshop),
                     searchController:
                         WorkshopController.instance.searchController,
                     onSearchChanged: (query) {

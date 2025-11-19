@@ -77,12 +77,6 @@ class WorkshopController extends GetxController {
   }
 
   void searchQuery(String query) {
-    if (query.isEmpty) {
-      filteredDataList.assignAll(dataList);
-      update();
-      return;
-    }
-    filteredDataList.clear();
     filteredDataList.assignAll(
       dataList.where(
         (workshop) =>
@@ -90,7 +84,6 @@ class WorkshopController extends GetxController {
             workshop.category!.toLowerCase().contains(query.toLowerCase()),
       ),
     );
-    update();
   }
 
   void deleteWorkshop(int id) {

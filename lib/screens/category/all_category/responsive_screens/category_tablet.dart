@@ -5,6 +5,7 @@ import 'package:hkdigiskill_admin/common/widgets/breadcrumbs/breadcrumb_with_hea
 import 'package:hkdigiskill_admin/common/widgets/containers/rounded_container.dart';
 import 'package:hkdigiskill_admin/common/widgets/data_table/table_header.dart';
 import 'package:hkdigiskill_admin/routes/routes.dart';
+import 'package:hkdigiskill_admin/screens/category/all_category/controllers/category_controller.dart';
 import 'package:hkdigiskill_admin/screens/category/all_category/table/data_table.dart';
 import 'package:hkdigiskill_admin/utils/constants/colors.dart';
 import 'package:hkdigiskill_admin/utils/constants/sizes.dart';
@@ -15,6 +16,7 @@ class CategoryTabletScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = CategoryController.instance;
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.all(AdminSizes.defaultSpace),
@@ -43,6 +45,10 @@ class CategoryTabletScreen extends StatelessWidget {
                   AdminTableHeader(
                     buttonText: "Create New Category",
                     onPressed: () => Get.toNamed(AdminRoutes.createCategory),
+                    searchController: controller.searchController,
+                    onSearchChanged: (query) {
+                      controller.searchQuery(query);
+                    },
                   ),
                   Gap(AdminSizes.spaceBtwSections),
                   CategoryTable(),

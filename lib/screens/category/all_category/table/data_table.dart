@@ -15,6 +15,10 @@ class CategoryTable extends StatelessWidget {
     final controller = CategoryController.instance;
 
     return Obx(() {
+      Visibility(
+        visible: false,
+        child: Text(controller.filteredDataList.length.toString()),
+      );
       return AdminPaginatedDataTable(
         minWidth: 1000,
         tableHeight: 640,

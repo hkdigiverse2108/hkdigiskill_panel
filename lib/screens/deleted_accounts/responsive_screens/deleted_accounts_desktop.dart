@@ -1,40 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:hkdigiskill_admin/common/widgets/breadcrumbs/breadcrumb_with_heading.dart';
 import 'package:hkdigiskill_admin/common/widgets/containers/rounded_container.dart';
 import 'package:hkdigiskill_admin/common/widgets/data_table/table_header.dart';
-import 'package:hkdigiskill_admin/routes/routes.dart';
-import 'package:hkdigiskill_admin/screens/category/all_category/controllers/category_controller.dart';
-import 'package:hkdigiskill_admin/screens/category/all_category/table/data_table.dart';
+import 'package:hkdigiskill_admin/screens/deleted_accounts/controllers/deleted_accounts_controller.dart';
+import 'package:hkdigiskill_admin/screens/deleted_accounts/table/data_table.dart';
 import 'package:hkdigiskill_admin/utils/constants/colors.dart';
 import 'package:hkdigiskill_admin/utils/constants/sizes.dart';
 import 'package:hkdigiskill_admin/utils/helpers/helpers.dart';
 
-class CategoryMobileScreen extends StatelessWidget {
-  const CategoryMobileScreen({super.key});
+class DeletedAccountsDesktopScreen extends StatelessWidget {
+  const DeletedAccountsDesktopScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = CategoryController.instance;
     return Scaffold(
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(AdminSizes.defaultSpace),
+        padding: const EdgeInsets.all(AdminSizes.defaultSpace),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
+            // Breadcrumb and Header
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                AdminBreadcrumbWithHeading(
-                  breadcrumbsItems: ["Category Screen"],
-                  heading: "Category",
+                const AdminBreadcrumbWithHeading(
+                  heading: "Deleted Accounts",
+                  breadcrumbsItems: ["Deleted Accounts"],
                 ),
+
+                // Add filter/sort options here if needed
               ],
             ),
             const Gap(AdminSizes.spaceBtwSections),
+
+            // Table Section
             AdminRoundedContainer(
               backgroundColor: AdminHelperFunctions.isDarkMode(context)
                   ? AdminColors.black
@@ -42,17 +43,21 @@ class CategoryMobileScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Table Header with Create Button
                   AdminTableHeader(
-                    buttonText: "Create New Category",
-                    onPressed: () => Get.toNamed(AdminRoutes.createCategory),
+                    buttonText: "Create Workshop",
+                    isButtonVisible: false,
                     searchController:
-                        CategoryController.instance.searchController,
+                        DeletedAccountsController.instance.searchController,
                     onSearchChanged: (query) {
-                      CategoryController.instance.searchQuery(query);
+                      DeletedAccountsController.instance.searchQuery(query);
                     },
                   ),
-                  Gap(AdminSizes.spaceBtwSections),
-                  CategoryTable(),
+
+                  const Gap(AdminSizes.spaceBtwSections),
+
+                  // Workshop Table
+                  const AccountsTable(),
                 ],
               ),
             ),

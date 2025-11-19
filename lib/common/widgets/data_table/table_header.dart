@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:hkdigiskill_admin/routes/routes.dart';
 import 'package:hkdigiskill_admin/utils/device/device_utility.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -9,12 +7,15 @@ class AdminTableHeader extends StatelessWidget {
     super.key,
     this.onPressed,
     required this.buttonText,
+    this.isButtonVisible = true,
     this.searchController,
     this.onSearchChanged,
   });
 
   final Function()? onPressed;
   final String buttonText;
+
+  final bool isButtonVisible;
 
   final TextEditingController? searchController;
   final Function(String)? onSearchChanged;
@@ -28,13 +29,14 @@ class AdminTableHeader extends StatelessWidget {
           flex: AdminDeviceUtility.isDesktopScreen(context) ? 3 : 1,
           child: Row(
             children: [
-              SizedBox(
-                width: 200,
-                child: ElevatedButton(
-                  onPressed: onPressed,
-                  child: Text(buttonText),
+              if (isButtonVisible)
+                SizedBox(
+                  width: 200,
+                  child: ElevatedButton(
+                    onPressed: onPressed,
+                    child: Text(buttonText),
+                  ),
                 ),
-              ),
             ],
           ),
         ),

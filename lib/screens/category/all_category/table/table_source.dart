@@ -16,7 +16,7 @@ class CategoryDataSource extends DataTableSource {
 
   @override
   DataRow? getRow(int index) {
-    final category = controller.dataList[index];
+    final category = controller.filteredDataList[index];
 
     return DataRow2(
       onTap: () {},

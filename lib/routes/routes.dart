@@ -8,16 +8,19 @@ class AdminRoutes {
 
   // Category
   static const category = '/category';
-  static const createCategory = '/create-category';
-  static const editCategory = '/edit-category';
+  static const createCategory = '/category-create';
+  static const editCategory = '/category-edit';
 
   // Workshop
   static const workshop = '/workshop';
+  static const createWorkshop = '/workshop-create';
+  static const editWorkshop = '/workshop-edit';
+
   static const course = '/course';
-  static const wWorkshops = '$workshop/workshops';
-  static const wCurriculum = '$workshop/curriculum';
+  static const wWorkshops = '/workshops';
+  static const wCurriculum = '/workshopsCurriculum';
   static const wBuy = '$workshop/buy';
-  static const wFaq = '$workshop/faq';
+  static const wFaq = '/workshopFaq';
   static const wTestimonials = '$workshop/testimonials';
   static const cCourses = '$course/courses';
   static const cLessons = '$course/lessons';

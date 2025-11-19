@@ -90,11 +90,13 @@ class AdminPaginatedDataTable extends StatelessWidget {
           showFirstLastButtons: true,
           renderEmptyRowsInTheEnd: false,
           onRowsPerPageChanged: (value) {},
-          empty: AdminAnimationLoaderWidget(
-            text: 'Nothing Found',
-            animation: AdminImages.emptyAnimation,
-            height: 200,
-            width: 200,
+          empty: Center(
+            child: AdminAnimationLoaderWidget(
+              text: 'Nothing Found',
+              animation: AdminImages.emptyAnimation,
+              height: 200,
+              width: 200,
+            ),
           ),
         ),
       ),

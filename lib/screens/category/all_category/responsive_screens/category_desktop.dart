@@ -47,6 +47,10 @@ class CategoryDesktopScreen extends StatelessWidget {
                   AdminTableHeader(
                     buttonText: "Create New Category",
                     onPressed: () => Get.toNamed(AdminRoutes.createCategory),
+                    searchController: controller.searchController,
+                    onSearchChanged: (query) {
+                      controller.searchQuery(query);
+                    },
                   ),
                   Gap(AdminSizes.spaceBtwSections),
                   CategoryTable(),
