@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:hkdigiskill_admin/common/widgets/images/circular_image.dart';
 import 'package:hkdigiskill_admin/common/widgets/layouts/sidebars/menu/menu_item.dart';
 import 'package:hkdigiskill_admin/routes/routes.dart';
@@ -54,6 +53,11 @@ class AdminSidebar extends StatelessWidget {
                       route: AdminRoutes.dashboard,
                       title: 'Dashboard',
                       icon: Iconsax.status,
+                    ),
+                    AdminMenuItem(
+                      route: AdminRoutes.media,
+                      title: 'Media',
+                      icon: Iconsax.image,
                     ),
                     AdminMenuItem(
                       route: AdminRoutes.transactions,

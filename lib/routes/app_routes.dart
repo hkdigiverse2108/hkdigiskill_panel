@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
 import 'package:hkdigiskill_admin/bindings/category_binding.dart';
 import 'package:hkdigiskill_admin/bindings/deleted_accounts_binding.dart';
+import 'package:hkdigiskill_admin/bindings/faq_binding.dart';
+import 'package:hkdigiskill_admin/bindings/get_in_touch_binding.dart';
 import 'package:hkdigiskill_admin/bindings/login_binding.dart';
+import 'package:hkdigiskill_admin/bindings/media_binding.dart';
 import 'package:hkdigiskill_admin/bindings/otp_binding.dart';
 import 'package:hkdigiskill_admin/bindings/partners_binding.dart';
 import 'package:hkdigiskill_admin/bindings/workshop_binding.dart';
@@ -12,8 +15,14 @@ import 'package:hkdigiskill_admin/screens/category/create_category/create_catego
 import 'package:hkdigiskill_admin/screens/category/edit_category/edit_category.dart';
 import 'package:hkdigiskill_admin/screens/dashboard/dashboard.dart';
 import 'package:hkdigiskill_admin/screens/deleted_accounts/deleted_accounts.dart';
+import 'package:hkdigiskill_admin/screens/faq/all_faq/all_faq.dart';
+import 'package:hkdigiskill_admin/screens/faq/create_faq/create_faq.dart';
+import 'package:hkdigiskill_admin/screens/faq/edit_faq/edit_faq.dart';
 import 'package:hkdigiskill_admin/screens/forgot_password/forgot_password.dart';
+import 'package:hkdigiskill_admin/screens/get_in_touch/all_get_in_touch/all_get_in_touch.dart';
+import 'package:hkdigiskill_admin/screens/get_in_touch/edit_get_in_touch/edit_get_in_touch.dart';
 import 'package:hkdigiskill_admin/screens/login/login_page.dart';
+import 'package:hkdigiskill_admin/screens/media/media.dart';
 import 'package:hkdigiskill_admin/screens/otp/otp.dart';
 import 'package:hkdigiskill_admin/screens/our_trusted_partners/all_partners/all_partners.dart';
 import 'package:hkdigiskill_admin/screens/reset_password/reset_password.dart';
@@ -41,6 +50,12 @@ class AppRoute {
     GetPage(
       name: AdminRoutes.dashboard,
       page: () => DashboardScreen(),
+      middlewares: [RoutesMiddleware()],
+    ),
+    GetPage(
+      name: AdminRoutes.media,
+      page: () => MediaScreen(),
+      binding: MediaBinding(),
       middlewares: [RoutesMiddleware()],
     ),
     GetPage(
@@ -88,6 +103,40 @@ class AppRoute {
     //   binding: WorkshopBinding(),
     //   middlewares: [RoutesMiddleware()],
     // ),
+
+    // FAQ
+    GetPage(
+      name: AdminRoutes.faq,
+      page: () => AllFaqScreen(),
+      binding: FaqBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+    GetPage(
+      name: AdminRoutes.createFaq,
+      page: () => CreateFaqScreen(),
+      binding: FaqBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+    GetPage(
+      name: AdminRoutes.editFaq,
+      page: () => EditFaqScreen(),
+      binding: FaqBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+
+    // Get In Touch
+    GetPage(
+      name: AdminRoutes.getInTouch,
+      page: () => AllGetInTouchScreen(),
+      binding: GetInTouchBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+    GetPage(
+      name: AdminRoutes.editGetInTouch,
+      page: () => EditGetInTouchScreen(),
+      binding: GetInTouchBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
 
     // Deleted Accounts
     GetPage(

@@ -16,6 +16,9 @@ class AdminRoutes {
   static const createWorkshop = '/workshop-create';
   static const editWorkshop = '/workshop-edit';
 
+  // media
+  static const media = '/media';
+
   static const course = '/course';
   static const wWorkshops = '/workshops';
   static const wCurriculum = '/workshopsCurriculum';
@@ -32,10 +35,13 @@ class AdminRoutes {
   static const deletedAccounts = '/deleted-accounts';
   static const trustedPartners = '/trusted-partners';
   static const faq = '/faq';
+  static const createFaq = '/faq-create';
+  static const editFaq = '/faq-edit';
   static const testimonials = '/testimonials';
   static const adminUsers = '/admin-users';
   static const blog = '/blog';
   static const getInTouch = '/get-in-touch';
+  static const editGetInTouch = '/get-in-touch-edit';
   static const gallery = '/gallery';
   static const newsLetter = '/news-letter';
   static const banners = '/banners';
@@ -49,6 +55,7 @@ class AdminRoutes {
 
   static List sidebarMenuItems = [
     dashboard,
+    media,
     transactions,
     category,
     workshop,
