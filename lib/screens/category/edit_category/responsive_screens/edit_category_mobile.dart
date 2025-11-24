@@ -4,7 +4,7 @@ import 'package:hkdigiskill_admin/data/models/category_model.dart';
 class EditCategoryMobileScreen extends StatelessWidget {
   const EditCategoryMobileScreen({super.key, required this.category});
 
-  final CategoryModel category;
+  final CourseCategoryDatum category;
 
   @override
   Widget build(BuildContext context) {

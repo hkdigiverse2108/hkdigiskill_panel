@@ -1,12 +1,21 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill_admin/common/widgets/loaders/loaders.dart';
 import 'package:hkdigiskill_admin/data/models/get_in_touch_model.dart';
+import 'package:hkdigiskill_admin/data/services/api_service.dart';
+import 'package:hkdigiskill_admin/data/services/storage_service.dart';
+import 'package:hkdigiskill_admin/utils/constants/api_constants.dart';
 
 class GetInTouchController extends GetxController {
   static GetInTouchController get instance => Get.find();
 
   var sortAscending = true.obs;
   var sortColumnIndex = 0.obs;
+  var isLoading = false.obs;
+  final apiService = ApiService(baseUrl: ApiConstants.baseUrl);
+  final storageService = AdminStorageService();
 
   var dataList = <GetInTouchModel>[].obs;
   var filteredDataList = <GetInTouchModel>[].obs;
@@ -18,19 +27,33 @@ class GetInTouchController extends GetxController {
     fetchItems();
   }
 
-  void fetchItems() {
-    dataList.addAll(List.generate(
-      20,
-      (i) => GetInTouchModel(
-        id: i + 1,
-        name: 'User ${i + 1}',
-        email: 'user${i + 1}@example.com',
-        phoneNumber: '+1-555-010${i.toString().padLeft(2, '0')}',
-        subject: 'Subject ${i + 1}',
-        message: 'This is a sample message number ${i + 1}.',
-      ),
-    ));
-    filteredDataList.assignAll(dataList);
+  void fetchItems() async {
+    try {
+      isLoading.value = true;
+
+      final response = await apiService.get(
+        headers: {"authorization": storageService.token!},
+        path: ApiConstants.getInTouch,
+        decoder: (json) {
+          final data = json['data']['contact_messages_data'] as List;
+          return data
+              .map<GetInTouchModel>((e) => GetInTouchModel.fromJson(e))
+              .toList();
+        },
+      );
+
+      dataList.assignAll(response);
+
+      filteredDataList.assignAll(dataList);
+    } catch (e) {
+      AdminLoaders.errorSnackBar(
+        title: "Error",
+        message: e.toString(),
+        // message: "Something went wrong. Please try again.",
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   void sort(int columnIndex, bool ascending) {
@@ -62,15 +85,36 @@ class GetInTouchController extends GetxController {
   void searchQuery(String query) {
     final q = query.toLowerCase();
     filteredDataList.assignAll(
-      dataList.where((e) =>
-          e.name.toLowerCase().contains(q) ||
-          e.email.toLowerCase().contains(q) ||
-          e.subject.toLowerCase().contains(q)),
+      dataList.where(
+        (e) =>
+            e.name.toLowerCase().contains(q) ||
+            e.email.toLowerCase().contains(q) ||
+            e.subject.toLowerCase().contains(q),
+      ),
     );
   }
 
-  void deleteItem(int id) {
-    dataList.removeWhere((e) => e.id == id);
-    filteredDataList.removeWhere((e) => e.id == id);
+  void deleteItem(String id) async {
+    try {
+      isLoading.value = true;
+
+      final response = await apiService.delete(
+        path: "${ApiConstants.getInTouchDelete}/$id",
+        headers: {"token": storageService.token!},
+        decoder: (json) {},
+      );
+      AdminLoaders.successSnackBar(
+        title: "Get In Touch",
+        message: "Deleted successfully",
+      );
+      fetchItems();
+    } catch (e) {
+      log(e.toString());
+      AdminLoaders.errorSnackBar(
+        title: "Error",
+        message: e.toString(),
+        // message: "Something went wrong. Please try again.",
+      );
+    }
   }
 }

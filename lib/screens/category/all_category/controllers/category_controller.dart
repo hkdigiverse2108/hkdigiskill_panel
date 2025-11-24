@@ -1,44 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill_admin/common/widgets/loaders/loaders.dart';
 import 'package:hkdigiskill_admin/data/models/category_model.dart';
-import 'package:hkdigiskill_admin/utils/constants/image_strings.dart';
+import 'package:hkdigiskill_admin/data/services/api_service.dart';
+import 'package:hkdigiskill_admin/data/services/storage_service.dart';
+import 'package:hkdigiskill_admin/utils/constants/api_constants.dart';
 
 class CategoryController extends GetxController {
   static CategoryController get instance => Get.find();
 
   var sortAscending = true.obs;
   var sortColumnIndex = 0.obs;
+  var isLoading = false.obs;
 
-  var dataList = <CategoryModel>[].obs;
-  var filteredDataList = <CategoryModel>[].obs;
+  var dataList = <CourseCategoryDatum>[].obs;
+  var filteredDataList = <CourseCategoryDatum>[].obs;
+
+  final apiService = ApiService(baseUrl: ApiConstants.baseUrl);
+
+  final storageService = AdminStorageService();
 
   // RxList<bool> selectedRows = <bool>[].obs;
   final searchController = TextEditingController();
+  var token = "";
 
   @override
   void onInit() {
     super.onInit();
+    token = storageService.token!;
     fetchCategories();
   }
 
-  void fetchCategories() {
-    dataList.addAll(
-      List.generate(
-        36,
-        (index) => CategoryModel(
-          id: index + 1,
-          name: "Category ${index + 1}",
-          image: AdminImages.profile,
-          description: 'Category Description',
-          courseCount: 2,
-          isFeatured: false,
-        ),
-      ),
-    );
+  void fetchCategories() async {
+    try {
+      isLoading.value = true;
 
-    // selectedRows.assignAll(List.generate(36, (index) => false));
+      final response = await apiService.get(
+        headers: {"authorization": token},
+        path: ApiConstants.category,
+        decoder: (json) => CategoryModel.fromJson(json),
+      );
 
-    filteredDataList.assignAll(dataList);
+      dataList.assignAll(response.data!.courseCategoryData ?? []);
+
+      filteredDataList.assignAll(dataList);
+    } catch (e) {
+      AdminLoaders.errorSnackBar(
+        title: "Error",
+        message: e.toString(),
+        // message: "Something went wrong. Please try again.",
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   void sort(int columnIndex, bool ascending) {
@@ -62,9 +76,9 @@ class CategoryController extends GetxController {
     });
   }
 
-  void deleteCategory(int id) {
-    dataList.removeWhere((workshop) => workshop.id == id);
-    filteredDataList.removeWhere((workshop) => workshop.id == id);
+  void deleteCategory(String id) {
+    dataList.removeWhere((category) => category.id == id);
+    filteredDataList.removeWhere((category) => category.id == id);
   }
 
   void searchQuery(String query) {

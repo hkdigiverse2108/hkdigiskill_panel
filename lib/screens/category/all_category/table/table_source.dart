@@ -9,6 +9,7 @@ import 'package:hkdigiskill_admin/routes/routes.dart';
 import 'package:hkdigiskill_admin/screens/category/all_category/controllers/category_controller.dart';
 import 'package:hkdigiskill_admin/utils/constants/colors.dart';
 import 'package:hkdigiskill_admin/utils/constants/enums.dart';
+import 'package:hkdigiskill_admin/utils/constants/image_strings.dart';
 import 'package:hkdigiskill_admin/utils/constants/sizes.dart';
 
 class CategoryDataSource extends DataTableSource {
@@ -30,8 +31,10 @@ class CategoryDataSource extends DataTableSource {
           Row(
             children: [
               AdminRoundedImage(
-                imageType: ImageType.network,
-                image: category.image,
+                imageType: category.image != null
+                    ? ImageType.network
+                    : ImageType.asset,
+                image: category.image ?? AdminImages.defaultImage,
                 width: 50,
                 height: 50,
                 padding: AdminSizes.sm,
@@ -59,7 +62,7 @@ class CategoryDataSource extends DataTableSource {
             maxLines: 1,
           ),
         ),
-        DataCell(Text(category.courseCount.toString())),
+        DataCell(Text(category.courses!.length.toString())),
         DataCell(Text(category.isFeatured.toString())),
         DataCell(
           AdminTableActionIconButtons(

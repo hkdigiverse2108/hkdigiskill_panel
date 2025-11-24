@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -13,15 +14,49 @@ class ApiService {
     };
   }
 
+  void _logRequest(
+    String method,
+    Uri uri,
+    Map<String, String> headers,
+    dynamic body,
+  ) {
+    print('API Request - $method $uri');
+    print('Headers: $headers');
+    if (body != null) print('Body: $body');
+  }
+
+  T _processResponse<T>(
+    http.Response response,
+    T Function(dynamic json) decoder,
+  ) {
+    print('API Response - Status: ${response.statusCode}');
+    print('Response Body: ${response.body}');
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final jsonResponse = jsonDecode(response.body);
+      return decoder(jsonResponse);
+    } else {
+      throw ApiException(
+        statusCode: response.statusCode,
+        message: response.reasonPhrase ?? "Unknown error",
+        body: response.body,
+      );
+    }
+  }
+
   Future<T> get<T>({
     required String path,
     Map<String, String>? headers,
     Map<String, dynamic>? queryParameters,
     required T Function(dynamic json) decoder,
   }) async {
-    final uri = Uri.parse(baseUrl + path).replace(
-        queryParameters: queryParameters);
-    final response = await http.get(uri, headers: _prepareHeaders(headers));
+    final uri = Uri.parse(
+      baseUrl + path,
+    ).replace(queryParameters: queryParameters);
+    final requestHeaders = _prepareHeaders(headers);
+    _logRequest('GET', uri, requestHeaders, null);
+
+    final response = await http.get(uri, headers: requestHeaders);
     return _processResponse(response, decoder);
   }
 
@@ -32,12 +67,17 @@ class ApiService {
     dynamic body,
     required T Function(dynamic json) decoder,
   }) async {
-    final uri = Uri.parse(baseUrl + path).replace(
-        queryParameters: queryParameters);
+    final uri = Uri.parse(
+      baseUrl + path,
+    ).replace(queryParameters: queryParameters);
+    final requestHeaders = _prepareHeaders(headers);
+    final encodedBody = jsonEncode(body);
+    _logRequest('POST', uri, requestHeaders, encodedBody);
+
     final response = await http.post(
       uri,
-      headers: _prepareHeaders(headers),
-      body: jsonEncode(body),
+      headers: requestHeaders,
+      body: encodedBody,
     );
     return _processResponse(response, decoder);
   }
@@ -49,12 +89,17 @@ class ApiService {
     dynamic body,
     required T Function(dynamic json) decoder,
   }) async {
-    final uri = Uri.parse(baseUrl + path).replace(
-        queryParameters: queryParameters);
+    final uri = Uri.parse(
+      baseUrl + path,
+    ).replace(queryParameters: queryParameters);
+    final requestHeaders = _prepareHeaders(headers);
+    final encodedBody = jsonEncode(body);
+    _logRequest('PUT', uri, requestHeaders, encodedBody);
+
     final response = await http.put(
       uri,
-      headers: _prepareHeaders(headers),
-      body: jsonEncode(body),
+      headers: requestHeaders,
+      body: encodedBody,
     );
     return _processResponse(response, decoder);
   }
@@ -66,24 +111,35 @@ class ApiService {
     dynamic body,
     required T Function(dynamic json) decoder,
   }) async {
-    final uri = Uri.parse(baseUrl + path).replace(
-        queryParameters: queryParameters);
+    final uri = Uri.parse(
+      baseUrl + path,
+    ).replace(queryParameters: queryParameters);
+    final requestHeaders = _prepareHeaders(headers);
+    final encodedBody = jsonEncode(body);
+    _logRequest('DELETE', uri, requestHeaders, encodedBody);
+
     final response = await http.delete(
       uri,
-      headers: _prepareHeaders(headers),
-      body: jsonEncode(body),
+      headers: requestHeaders,
+      // body: encodedBody,
     );
     return _processResponse(response, decoder);
   }
+}
 
-  T _processResponse<T>(http.Response response,
-      T Function(dynamic json) decoder) {
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      final jsonResponse = jsonDecode(response.body);
-      return decoder(jsonResponse);
-    } else {
-      throw Exception(
-          'API Error: ${response.statusCode} ${response.reasonPhrase}');
-    }
+class ApiException implements Exception {
+  final int statusCode;
+  final String message;
+  final String body;
+
+  ApiException({
+    required this.statusCode,
+    required this.message,
+    required this.body,
+  });
+
+  @override
+  String toString() {
+    return 'ApiException: HTTP $statusCode - $message\nBody: $body';
   }
 }

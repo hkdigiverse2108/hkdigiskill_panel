@@ -12,7 +12,7 @@ import 'package:iconsax/iconsax.dart';
 class EditCategoryForm extends GetView<EditCategoryController> {
   const EditCategoryForm({super.key, required this.category});
 
-  final CategoryModel category;
+  final CourseCategoryDatum category;
 
   @override
   Widget build(BuildContext context) {

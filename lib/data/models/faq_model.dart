@@ -1,45 +1,94 @@
+import 'package:hkdigiskill_admin/utils/constants/enums.dart';
+
 class FaqModel {
-  final int id;
-  final String question;
-  final String answer;
-  final bool isFeatured;
+  String id;
+  String question;
+  String answer;
+  bool isFeatured;
+  FaqType type;
+  bool? isDeleted;
+  bool? isBlocked;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   FaqModel({
     required this.id,
     required this.question,
     required this.answer,
-    this.isFeatured = false,
+    required this.isFeatured,
+    required this.type,
+    this.isDeleted,
+    this.isBlocked,
+    this.createdAt,
+    this.updatedAt,
   });
 
-  factory FaqModel.fromJson(Map<String, dynamic> json) {
-    return FaqModel(
-      id: json['id'],
-      question: json['question'],
-      answer: json['answer'],
-      isFeatured: json['isFeatured'] ?? false,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'question': question,
-      'answer': answer,
-      'isFeatured': isFeatured,
-    };
-  }
-
   FaqModel copyWith({
-    int? id,
+    String? id,
     String? question,
     String? answer,
     bool? isFeatured,
-  }) {
-    return FaqModel(
-      id: id ?? this.id,
-      question: question ?? this.question,
-      answer: answer ?? this.answer,
-      isFeatured: isFeatured ?? this.isFeatured,
-    );
+    FaqType? type,
+    bool? isDeleted,
+    bool? isBlocked,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => FaqModel(
+    id: id ?? this.id,
+    question: question ?? this.question,
+    answer: answer ?? this.answer,
+    isFeatured: isFeatured ?? this.isFeatured,
+    type: type ?? this.type,
+    isDeleted: isDeleted ?? this.isDeleted,
+    isBlocked: isBlocked ?? this.isBlocked,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+
+  factory FaqModel.fromJson(Map<String, dynamic> json) => FaqModel(
+    id: json["_id"],
+    question: json["question"],
+    answer: json["answer"],
+    isFeatured: json["isFeatured"],
+    type: json["type"] == null
+        ? FaqType.home
+        : FaqTypeExtension.fromString(json["type"]),
+    isDeleted: json["isDeleted"],
+    isBlocked: json["isBlocked"],
+    createdAt: json["createdAt"] == null
+        ? null
+        : DateTime.parse(json["createdAt"]),
+    updatedAt: json["updatedAt"] == null
+        ? null
+        : DateTime.parse(json["updatedAt"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "question": question,
+    "answer": answer,
+    "isFeatured": isFeatured,
+    "type": type,
+    "isDeleted": isDeleted,
+    "isBlocked": isBlocked,
+    "createdAt": createdAt?.toIso8601String(),
+    "updatedAt": updatedAt?.toIso8601String(),
+  };
+}
+
+extension FaqTypeExtension on FaqType {
+  static FaqType fromString(String value) {
+    switch (value.toLowerCase()) {
+      case 'course':
+        return FaqType.course;
+      case 'workshop':
+        return FaqType.workshop;
+      case 'home':
+        return FaqType.home;
+      default:
+        return FaqType.home; // fallback
+    }
   }
+
+  String toJsonValue() => name; // converts enum → string
 }

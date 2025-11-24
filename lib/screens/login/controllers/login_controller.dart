@@ -3,9 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill_admin/common/widgets/loaders/loaders.dart';
-import 'package:hkdigiskill_admin/data/models/user_model.dart';
+import 'package:hkdigiskill_admin/data/models/login_model.dart';
+import 'package:hkdigiskill_admin/data/services/api_service.dart';
 import 'package:hkdigiskill_admin/data/services/storage_service.dart';
 import 'package:hkdigiskill_admin/routes/routes.dart';
+import 'package:hkdigiskill_admin/utils/constants/api_constants.dart';
 import 'package:hkdigiskill_admin/utils/constants/image_strings.dart';
 import 'package:hkdigiskill_admin/utils/popups/full_screen_loader.dart';
 
@@ -18,9 +20,11 @@ class LoginController extends GetxController {
   final rememberMe = false.obs;
   final storageService = AdminStorageService();
 
-  final email = TextEditingController(text: "Admin@gmail.com");
+  final email = TextEditingController(text: "pramitmangukiya602@gmail.com");
   final password = TextEditingController(text: "Admin@123");
   final loginFormKey = GlobalKey<FormState>();
+
+  final apiService = ApiService(baseUrl: ApiConstants.baseUrl);
 
   Future<void> login() async {
     try {
@@ -28,12 +32,10 @@ class LoginController extends GetxController {
         "E-mail Address Verified, Otp is being sent...",
         AdminImages.sendOtpAnimation,
       );
-      await Future.delayed(const Duration(seconds: 2));
 
       final isConnected = await NetworkManager.instance.isConnected();
       log(isConnected.toString());
       if (!isConnected) {
-        AdminFullScreenLoader.stopLoading();
         AdminLoaders.errorSnackBar(
           title: "No Internet Connection",
           message: "Please check your internet connection and try again.",
@@ -43,10 +45,27 @@ class LoginController extends GetxController {
       }
       // for validation
       if (!loginFormKey.currentState!.validate()) {
-        AdminFullScreenLoader.stopLoading();
         return;
       }
 
+      final response = await apiService.post(
+        path: ApiConstants.login,
+        body: {"email": email.text, "password": password.text},
+        decoder: (json) => LoginModel.fromJson(json),
+      );
+      final token = response.data.token;
+      final data = response.data;
+
+      final user = {
+        'id': data.id,
+        'email': data.email,
+        'name': data.fullName,
+        'token': data.token,
+      };
+
+      storageService.token = token;
+      storageService.user = user;
+      storageService.role = data.role;
       AdminFullScreenLoader.stopLoading();
 
       screenRedirect();
@@ -61,11 +80,12 @@ class LoginController extends GetxController {
   }
 
   void screenRedirect() {
+    Get.offAllNamed(AdminRoutes.dashboard);
     // if (storageService.user != null) {
-    Get.toNamed(
-      AdminRoutes.otp,
-      arguments: {"email": email.text, "forPasswordReset": false},
-    );
+    // Get.toNamed(
+    //   AdminRoutes.otp,
+    //   arguments: {"email": email.text, "forPasswordReset": false},
+    // );
     //   } else {
     //     Get.offAllNamed(AdminRoutes.login);
     //   }

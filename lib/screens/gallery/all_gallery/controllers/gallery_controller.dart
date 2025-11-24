@@ -8,6 +8,8 @@ class GalleryController extends GetxController {
   final sortAscending = true.obs;
   final sortColumnIndex = 0.obs;
 
+  final isLoading = false.obs;
+
   final dataList = <GalleryModel>[].obs;
   final filteredDataList = <GalleryModel>[].obs;
   final searchController = TextEditingController();
@@ -19,13 +21,17 @@ class GalleryController extends GetxController {
   }
 
   void fetchItems() {
-    dataList.addAll(List.generate(12, (i) =>
-        GalleryModel(
+    dataList.addAll(
+      List.generate(
+        12,
+        (i) => GalleryModel(
           id: i + 1,
           title: 'Gallery ${i + 1}',
           images: List.generate((i % 5) + 1, (j) => ''),
           description: i % 3 == 0 ? 'Optional description ${i + 1}' : null,
-        )));
+        ),
+      ),
+    );
     filteredDataList.assignAll(dataList);
   }
 
@@ -52,9 +58,11 @@ class GalleryController extends GetxController {
   void searchQuery(String query) {
     final q = query.toLowerCase();
     filteredDataList.assignAll(
-      dataList.where((e) =>
-          e.title.toLowerCase().contains(q) ||
-          (e.description ?? '').toLowerCase().contains(q)),
+      dataList.where(
+        (e) =>
+            e.title.toLowerCase().contains(q) ||
+            (e.description ?? '').toLowerCase().contains(q),
+      ),
     );
   }
 

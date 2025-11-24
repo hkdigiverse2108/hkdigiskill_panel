@@ -29,7 +29,9 @@ class AdminRoutes {
   static const cLessons = '$course/lessons';
   static const cCurriculum = '$course/curriculum';
   static const cBuy = '$course/buy';
-  static const cFaq = '$course/faq';
+  static const cFaq = '/course-faq';
+  static const cCreateFaq = '/course-faq-create';
+  static const cEditFaq = '/course-faq-edit';
   static const cTestimonials = '$course/testimonials';
   static const couponCode = '/coupon-code';
   static const deletedAccounts = '/deleted-accounts';

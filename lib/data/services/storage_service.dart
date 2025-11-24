@@ -1,5 +1,4 @@
 import 'package:get_storage/get_storage.dart';
-import 'package:hkdigiskill_admin/data/models/user_model.dart';
 
 class AdminStorageService {
   final storage = GetStorage();
@@ -8,6 +7,7 @@ class AdminStorageService {
   static const String tokenKey = 'token';
   static const String userKey = 'user';
   static const String themeKey = 'theme';
+  static const String roleKey = 'role';
 
   // static const String roleKey = 'role';
 
@@ -22,6 +22,12 @@ class AdminStorageService {
 
   set user(Map<String, dynamic>? value) =>
       value == null ? storage.remove(userKey) : storage.write(userKey, value);
+
+  // Role
+  String? get role => storage.read(roleKey);
+
+  set role(String? value) =>
+      value == null ? storage.remove(roleKey) : storage.write(roleKey, value);
 
   // login
   bool get isLoggedIn => token != null;

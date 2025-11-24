@@ -9,7 +9,7 @@ import 'package:hkdigiskill_admin/utils/constants/sizes.dart';
 class EditCategoryTabletScreen extends StatelessWidget {
   const EditCategoryTabletScreen({super.key, required this.category});
 
-  final CategoryModel category;
+  final CourseCategoryDatum category;
 
   @override
   Widget build(BuildContext context) {

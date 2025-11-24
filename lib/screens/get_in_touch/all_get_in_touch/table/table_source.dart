@@ -15,15 +15,28 @@ class GetInTouchDataSource extends DataTableSource {
     return DataRow2(
       cells: [
         DataCell(Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis)),
-        DataCell(Text(item.email, maxLines: 1, overflow: TextOverflow.ellipsis)),
-        DataCell(Text(item.phoneNumber, maxLines: 1, overflow: TextOverflow.ellipsis)),
-        DataCell(Text(item.subject, maxLines: 1, overflow: TextOverflow.ellipsis)),
-        DataCell(Text(item.message, maxLines: 1, overflow: TextOverflow.ellipsis)),
+        DataCell(
+          Text(item.email, maxLines: 1, overflow: TextOverflow.ellipsis),
+        ),
+        DataCell(
+          Text(item.phoneNumber, maxLines: 1, overflow: TextOverflow.ellipsis),
+        ),
+        DataCell(
+          Text(item.subject, maxLines: 1, overflow: TextOverflow.ellipsis),
+        ),
+        DataCell(
+          Text(
+            item.message ?? "No Message",
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
         DataCell(
           AdminTableActionIconButtons(
             edit: true,
             delete: true,
-            onEditPressed: () => Get.toNamed(AdminRoutes.editGetInTouch, arguments: item),
+            onEditPressed: () =>
+                Get.toNamed(AdminRoutes.editGetInTouch, arguments: item),
             onDeletePressed: () {
               ConfirmDialog.show(
                 title: 'Delete Message',

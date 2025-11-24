@@ -1,9 +1,11 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill_admin/common/widgets/animations/animation_loader.dart';
 import 'package:hkdigiskill_admin/common/widgets/data_table/paginated_data_table.dart';
 import 'package:hkdigiskill_admin/screens/get_in_touch/all_get_in_touch/controllers/get_in_touch_controller.dart';
 import 'package:hkdigiskill_admin/screens/get_in_touch/all_get_in_touch/table/table_source.dart';
+import 'package:hkdigiskill_admin/utils/constants/image_strings.dart';
 import 'package:hkdigiskill_admin/utils/constants/sizes.dart';
 
 class GetInTouchTable extends StatelessWidget {
@@ -14,6 +16,16 @@ class GetInTouchTable extends StatelessWidget {
     final controller = GetInTouchController.instance;
 
     return Obx(() {
+      if (controller.isLoading.value) {
+        return Center(
+          child: AdminAnimationLoaderWidget(
+            text: 'Loading Faqs',
+            animation: AdminImages.loadingAnimation,
+            height: 200,
+            width: 200,
+          ),
+        );
+      }
       Visibility(
         visible: false,
         child: Text(controller.filteredDataList.length.toString()),

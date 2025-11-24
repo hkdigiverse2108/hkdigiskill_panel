@@ -12,12 +12,15 @@ class EditCategoryController extends GetxController {
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  void initCategory(CategoryModel category) {
+  void initCategory(CourseCategoryDatum category) {
     nameController.text = category.name ?? '';
     descriptionController.text = category.description ?? '';
     isFeatured.value = category.isFeatured ?? false;
     pickedImagePath.value = category.image ?? '';
+    imageType.value = ImageType.network;
   }
 
   void onIconButtonPressed() {}
+
+  void updateCategory() {}
 }

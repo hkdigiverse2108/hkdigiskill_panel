@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
+import 'package:hkdigiskill_admin/bindings/banners_binding.dart';
 import 'package:hkdigiskill_admin/bindings/category_binding.dart';
+import 'package:hkdigiskill_admin/bindings/course_binding.dart';
 import 'package:hkdigiskill_admin/bindings/deleted_accounts_binding.dart';
 import 'package:hkdigiskill_admin/bindings/faq_binding.dart';
 import 'package:hkdigiskill_admin/bindings/gallery_binding.dart';
@@ -8,20 +10,28 @@ import 'package:hkdigiskill_admin/bindings/login_binding.dart';
 import 'package:hkdigiskill_admin/bindings/media_binding.dart';
 import 'package:hkdigiskill_admin/bindings/otp_binding.dart';
 import 'package:hkdigiskill_admin/bindings/partners_binding.dart';
-import 'package:hkdigiskill_admin/bindings/banners_binding.dart';
 import 'package:hkdigiskill_admin/bindings/testimonials_binding.dart';
 import 'package:hkdigiskill_admin/bindings/workshop_binding.dart';
 import 'package:hkdigiskill_admin/routes/routes.dart';
 import 'package:hkdigiskill_admin/routes/routes_middleware.dart';
+import 'package:hkdigiskill_admin/screens/banners/all_banners/all_banners.dart';
+import 'package:hkdigiskill_admin/screens/banners/create_banner/create_banner.dart';
+import 'package:hkdigiskill_admin/screens/banners/edit_banner/edit_banner.dart';
 import 'package:hkdigiskill_admin/screens/category/all_category/category.dart';
 import 'package:hkdigiskill_admin/screens/category/create_category/create_category.dart';
 import 'package:hkdigiskill_admin/screens/category/edit_category/edit_category.dart';
+import 'package:hkdigiskill_admin/screens/course/faq/all_faq/all_faq.dart';
+import 'package:hkdigiskill_admin/screens/course/faq/create_faq/create_faq.dart';
+import 'package:hkdigiskill_admin/screens/course/faq/edit_faq/edit_faq.dart';
 import 'package:hkdigiskill_admin/screens/dashboard/dashboard.dart';
 import 'package:hkdigiskill_admin/screens/deleted_accounts/deleted_accounts.dart';
 import 'package:hkdigiskill_admin/screens/faq/all_faq/all_faq.dart';
 import 'package:hkdigiskill_admin/screens/faq/create_faq/create_faq.dart';
 import 'package:hkdigiskill_admin/screens/faq/edit_faq/edit_faq.dart';
 import 'package:hkdigiskill_admin/screens/forgot_password/forgot_password.dart';
+import 'package:hkdigiskill_admin/screens/gallery/all_gallery/all_gallery.dart';
+import 'package:hkdigiskill_admin/screens/gallery/create_gallery/create_gallery.dart';
+import 'package:hkdigiskill_admin/screens/gallery/edit_gallery/edit_gallery.dart';
 import 'package:hkdigiskill_admin/screens/get_in_touch/all_get_in_touch/all_get_in_touch.dart';
 import 'package:hkdigiskill_admin/screens/get_in_touch/edit_get_in_touch/edit_get_in_touch.dart';
 import 'package:hkdigiskill_admin/screens/login/login_page.dart';
@@ -29,12 +39,6 @@ import 'package:hkdigiskill_admin/screens/media/media.dart';
 import 'package:hkdigiskill_admin/screens/otp/otp.dart';
 import 'package:hkdigiskill_admin/screens/our_trusted_partners/all_partners/all_partners.dart';
 import 'package:hkdigiskill_admin/screens/reset_password/reset_password.dart';
-import 'package:hkdigiskill_admin/screens/gallery/all_gallery/all_gallery.dart';
-import 'package:hkdigiskill_admin/screens/gallery/create_gallery/create_gallery.dart';
-import 'package:hkdigiskill_admin/screens/gallery/edit_gallery/edit_gallery.dart';
-import 'package:hkdigiskill_admin/screens/banners/all_banners/all_banners.dart';
-import 'package:hkdigiskill_admin/screens/banners/create_banner/create_banner.dart';
-import 'package:hkdigiskill_admin/screens/banners/edit_banner/edit_banner.dart';
 import 'package:hkdigiskill_admin/screens/testimonials/all_testimonials/all_testimonials.dart';
 import 'package:hkdigiskill_admin/screens/testimonials/create_testimonial/create_testimonial.dart';
 import 'package:hkdigiskill_admin/screens/testimonials/edit_testimonial/edit_testimonial.dart';
@@ -223,6 +227,26 @@ class AppRoute {
       name: AdminRoutes.trustedPartners,
       page: () => AllPartners(),
       binding: PartnersBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+
+    // Course Faq
+    GetPage(
+      name: AdminRoutes.cFaq,
+      page: () => CourseAllFaqScreen(),
+      binding: CourseBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+    GetPage(
+      name: AdminRoutes.cCreateFaq,
+      page: () => CourseCreateFaqScreen(),
+      binding: CourseBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+    GetPage(
+      name: AdminRoutes.cEditFaq,
+      page: () => CourseEditFaqScreen(),
+      binding: CourseBinding(),
       middlewares: [RoutesMiddleware()],
     ),
   ];
