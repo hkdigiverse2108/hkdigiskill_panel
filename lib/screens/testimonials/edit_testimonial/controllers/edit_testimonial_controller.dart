@@ -1,7 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill_admin/common/widgets/loaders/loaders.dart';
+import 'package:hkdigiskill_admin/data/models/image_model.dart';
 import 'package:hkdigiskill_admin/data/models/testimonial_model.dart';
+import 'package:hkdigiskill_admin/data/repositories/network_manager.dart';
+import 'package:hkdigiskill_admin/data/services/api_service.dart';
+import 'package:hkdigiskill_admin/data/services/storage_service.dart';
+import 'package:hkdigiskill_admin/screens/media/controllers/media_controller.dart';
 import 'package:hkdigiskill_admin/screens/testimonials/all_testimonials/controllers/testimonials_controller.dart';
+import 'package:hkdigiskill_admin/utils/constants/api_constants.dart';
 import 'package:hkdigiskill_admin/utils/constants/enums.dart';
 
 class EditTestimonialController extends GetxController {
@@ -13,10 +22,24 @@ class EditTestimonialController extends GetxController {
   final TextEditingController designationController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
+  final editTestimonialFormKey = GlobalKey<FormState>();
+
+  final apiService = ApiService(baseUrl: ApiConstants.baseUrl);
+  final storageService = AdminStorageService();
+
+  final controller = TestimonialsController.instance;
+
   var pickedImagePath = ''.obs;
   var imageType = ImageType.asset.obs;
 
-  void onIconButtonPressed() {}
+  void onIconButtonPressed() async {
+    final controller = Get.put(MediaController());
+    List<ImageModel>? selectedImages = await controller.selectImagesFromMedia();
+
+    if (selectedImages != null && selectedImages.isNotEmpty) {
+      pickedImagePath.value = selectedImages.first.url;
+    }
+  }
 
   void initItem(TestimonialModel item) {
     nameController.text = item.name;
@@ -28,24 +51,59 @@ class EditTestimonialController extends GetxController {
     imageType.value = item.image == null ? ImageType.asset : ImageType.network;
   }
 
-  void updateItem(TestimonialModel item) {
-    final controller = TestimonialsController.instance;
-    final updated = item.copyWith(
-      name: nameController.text.trim(),
-      designation: designationController.text.trim(),
-      description: descriptionController.text.trim().isEmpty
-          ? null
-          : descriptionController.text.trim(),
-      image: pickedImagePath.value.isEmpty ? null : pickedImagePath.value,
-      rate: rate.value.clamp(1, 5),
-      isFeatured: isFeatured.value,
-    );
+  void updateItem(TestimonialModel item) async {
+    try {
+      isLoading.value = true;
+      final isConnected = await NetworkManager.instance.isConnected();
+      log(isConnected.toString());
+      if (!isConnected) {
+        AdminLoaders.errorSnackBar(
+          title: "No Internet Connection",
+          message: "Please check your internet connection and try again.",
+          // message: "Something went wrong. Please try again.",
+        );
+        return;
+      }
+      // for validation
+      if (!editTestimonialFormKey.currentState!.validate()) {
+        return;
+      }
 
-    final idx = controller.dataList.indexWhere((e) => e.id == item.id);
-    if (idx != -1) controller.dataList[idx] = updated;
-    final fidx = controller.filteredDataList.indexWhere((e) => e.id == item.id);
-    if (fidx != -1) controller.filteredDataList[fidx] = updated;
+      final response = await apiService.post(
+        path: ApiConstants.testimonialsUpdate,
+        headers: {"authorization": storageService.token!},
+        body: {
+          "testimonialId": item.id,
+          "name": nameController.text,
+          "designation": designationController.text,
+          "description": descriptionController.text,
+          "rate": rate.value,
+          "isFeatured": isFeatured.value,
+        },
+        decoder: (json) => json as Map<String, dynamic>,
+      );
 
-    Get.back();
+      if (response['status'] == 200) {
+        controller.fetchTestimonials();
+        Get.back();
+        AdminLoaders.successSnackBar(
+          title: "Success",
+          message: "Testimonial updated successfully.",
+        );
+      } else {
+        AdminLoaders.errorSnackBar(
+          title: "Error",
+          message: "Something went wrong. Please try again.",
+        );
+      }
+    } catch (e) {
+      log(e.toString());
+      AdminLoaders.errorSnackBar(
+        title: "Error",
+        message: "Something went wrong. Please try again.",
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

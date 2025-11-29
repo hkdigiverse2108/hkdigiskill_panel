@@ -18,6 +18,7 @@ class CreateGalleryForm extends GetView<CreateGalleryController> {
       width: 700,
       padding: EdgeInsets.all(AdminSizes.defaultSpace),
       child: Form(
+        key: controller.galleryFormKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -86,11 +87,17 @@ class CreateGalleryForm extends GetView<CreateGalleryController> {
               ),
             ),
             SizedBox(height: AdminSizes.spaceBtwInputFields * 2),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: controller.createItem,
-                child: const Text('Create'),
+            Obx(
+              () => SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: controller.isLoading.value
+                      ? null
+                      : controller.createItem,
+                  child: controller.isLoading.value
+                      ? CircularProgressIndicator()
+                      : const Text('Create'),
+                ),
               ),
             ),
           ],

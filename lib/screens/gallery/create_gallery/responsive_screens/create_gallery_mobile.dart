@@ -18,7 +18,7 @@ class CreateGalleryMobileScreen extends StatelessWidget {
           children: const [
             AdminBreadcrumbWithHeading(
               returnToPreviousScreen: true,
-              breadcrumbsItems: [AdminRoutes.gallery, 'Gallery'],
+              breadcrumbsItems: [AdminRoutes.gallery, 'Create Gallery'],
               heading: 'Create Gallery',
             ),
             Gap(AdminSizes.spaceBtwSections),

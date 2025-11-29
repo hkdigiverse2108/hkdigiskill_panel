@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:hkdigiskill_admin/common/widgets/containers/rounded_container.dart';
 import 'package:hkdigiskill_admin/common/widgets/images/rounded_image.dart';
+import 'package:hkdigiskill_admin/screens/workshop/create_workshop/controllers/create_workshop_controller.dart';
 import 'package:hkdigiskill_admin/utils/constants/colors.dart';
 import 'package:hkdigiskill_admin/utils/constants/enums.dart';
 import 'package:hkdigiskill_admin/utils/constants/image_strings.dart';
@@ -12,6 +14,7 @@ class WorkshopThumbnailImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = CreateWorkshopController.instance;
     return AdminRoundedContainer(
       child: Column(
         children: [
@@ -21,44 +24,43 @@ class WorkshopThumbnailImage extends StatelessWidget {
           ),
           Gap(AdminSizes.spaceBtwItems),
 
-          AdminRoundedContainer(
-            height: 300,
-            backgroundColor: AdminColors.primaryBackground,
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: AdminRoundedImage(
-                          imageType: ImageType.asset,
-                          width: 220,
-                          height: 220,
-                          image: AdminImages.defaultImage,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(
-                    width: 200,
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: AdminColors.primaryBackground,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            AdminSizes.borderRadiusMd,
+          Obx(
+            () => AdminRoundedContainer(
+              height: 270,
+              backgroundColor: AdminColors.primaryBackground,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: AdminRoundedImage(
+                            imageType: controller.thumbnailImage.value.isEmpty
+                                ? ImageType.asset
+                                : ImageType.network,
+                            width: 220,
+                            height: 220,
+                            image: controller.thumbnailImage.value.isEmpty
+                                ? AdminImages.defaultImage
+                                : controller.thumbnailImage.value,
                           ),
                         ),
-                      ),
-                      onPressed: () {},
-                      child: const Text("Add Thumbnail"),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+            ),
+          ),
+          Gap(AdminSizes.spaceBtwItems),
+          SizedBox(
+            child: ElevatedButton(
+              onPressed: () {
+                controller.selectThumbnailImage();
+              },
+              child: const Text("Add Thumbnail"),
             ),
           ),
         ],

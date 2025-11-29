@@ -29,7 +29,7 @@ class CreateFaqController extends GetxController {
           "question": questionController.text,
           "answer": answerController.text,
           "isFeatured": isFeatured.value,
-          "type": FaqType.home.name,
+          "type": DashType.home.name,
         },
         decoder: (json) {},
       );

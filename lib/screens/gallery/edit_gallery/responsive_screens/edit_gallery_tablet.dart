@@ -21,7 +21,7 @@ class EditGalleryTabletScreen extends StatelessWidget {
           children: [
             const AdminBreadcrumbWithHeading(
               returnToPreviousScreen: true,
-              breadcrumbsItems: [AdminRoutes.gallery, 'Gallery'],
+              breadcrumbsItems: [AdminRoutes.gallery, 'Update Gallery'],
               heading: 'Edit Gallery',
             ),
             const Gap(AdminSizes.spaceBtwSections),

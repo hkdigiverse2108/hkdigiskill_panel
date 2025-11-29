@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hkdigiskill_admin/common/widgets/breadcrumbs/breadcrumb_with_heading.dart';
 import 'package:hkdigiskill_admin/routes/routes.dart';
-import 'package:hkdigiskill_admin/screens/coupon/create_coupon/widgets/create_coupon_form.dart';
+import 'package:hkdigiskill_admin/screens/coupon/create_coupon/widgets/basic_info.dart';
+import 'package:hkdigiskill_admin/screens/coupon/create_coupon/widgets/discount_&_amount.dart';
+import 'package:hkdigiskill_admin/screens/coupon/create_coupon/widgets/other.dart';
 import 'package:hkdigiskill_admin/utils/constants/sizes.dart';
 
 class CreateCouponDesktopScreen extends StatelessWidget {
@@ -28,7 +30,11 @@ class CreateCouponDesktopScreen extends StatelessWidget {
               ],
             ),
             const Gap(AdminSizes.spaceBtwSections),
-            const CreateCouponForm(),
+            CouponBasicInfo(),
+            Gap(AdminSizes.spaceBtwSections),
+            DiscountAndAmount(),
+            Gap(AdminSizes.spaceBtwSections),
+            Other(),
           ],
         ),
       ),

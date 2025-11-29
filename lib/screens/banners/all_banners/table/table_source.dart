@@ -24,20 +24,24 @@ class BannersDataSource extends DataTableSource {
       imagesCell = Row(
         children: [
           AdminRoundedImage(
-            image: item.imagePrimary ?? AdminImages.defaultImage,
+            image: item.images?.first ?? AdminImages.defaultImage,
             width: 50,
             height: 50,
-            imageType: (item.imagePrimary ?? '').isEmpty ? ImageType.asset : ImageType.network,
+            imageType: (item.images?.first ?? '').isEmpty
+                ? ImageType.asset
+                : ImageType.network,
             padding: AdminSizes.sm,
             borderRadius: AdminSizes.borderRadiusMd,
             backgroundColor: AdminColors.primaryBackground,
           ),
           const SizedBox(width: 8),
           AdminRoundedImage(
-            image: item.imageSecondary ?? AdminImages.defaultImage,
+            image: item.images?.last ?? AdminImages.defaultImage,
             width: 50,
             height: 50,
-            imageType: (item.imageSecondary ?? '').isEmpty ? ImageType.asset : ImageType.network,
+            imageType: (item.images?.last ?? '').isEmpty
+                ? ImageType.asset
+                : ImageType.network,
             padding: AdminSizes.sm,
             borderRadius: AdminSizes.borderRadiusMd,
             backgroundColor: AdminColors.primaryBackground,
@@ -46,34 +50,41 @@ class BannersDataSource extends DataTableSource {
       );
     } else {
       imagesCell = AdminRoundedImage(
-        image: item.imagePrimary ?? AdminImages.defaultImage,
+        image: item.images?.first ?? AdminImages.defaultImage,
         width: 50,
         height: 50,
-        imageType: (item.imagePrimary ?? '').isEmpty ? ImageType.asset : ImageType.network,
+        imageType: (item.images?.first ?? '').isEmpty
+            ? ImageType.asset
+            : ImageType.network,
         padding: AdminSizes.sm,
         borderRadius: AdminSizes.borderRadiusMd,
         backgroundColor: AdminColors.primaryBackground,
       );
     }
 
-    final titleOrLink = item.type == BannerType.web ? (item.title ?? '-') : (item.link ?? '-');
+    final titleOrLink = item.type == BannerType.web
+        ? (item.title ?? '-')
+        : (item.link ?? '-');
 
     return DataRow2(
       cells: [
         DataCell(Text(item.type.name.toUpperCase())),
-        DataCell(Text(titleOrLink, maxLines: 1, overflow: TextOverflow.ellipsis)),
+        DataCell(
+          Text(titleOrLink, maxLines: 1, overflow: TextOverflow.ellipsis),
+        ),
         DataCell(imagesCell),
         DataCell(
           AdminTableActionIconButtons(
             edit: true,
             delete: true,
-            onEditPressed: () => Get.toNamed(AdminRoutes.editBanner, arguments: item),
+            onEditPressed: () =>
+                Get.toNamed(AdminRoutes.editBanner, arguments: item),
             onDeletePressed: () {
               ConfirmDialog.show(
                 title: 'Delete Banner',
                 message: 'Are you sure you want to delete this banner?',
                 iconColor: Colors.red,
-                onConfirm: () => controller.deleteItem(item.id),
+                onConfirm: () => controller.deleteBanner(item.id),
               );
             },
           ),

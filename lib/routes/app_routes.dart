@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:hkdigiskill_admin/bindings/banners_binding.dart';
+import 'package:hkdigiskill_admin/bindings/blog_binding.dart';
 import 'package:hkdigiskill_admin/bindings/category_binding.dart';
 import 'package:hkdigiskill_admin/bindings/coupon_binding.dart';
 import 'package:hkdigiskill_admin/bindings/course_binding.dart';
@@ -13,20 +14,29 @@ import 'package:hkdigiskill_admin/bindings/otp_binding.dart';
 import 'package:hkdigiskill_admin/bindings/partners_binding.dart';
 import 'package:hkdigiskill_admin/bindings/testimonials_binding.dart';
 import 'package:hkdigiskill_admin/bindings/workshop_binding.dart';
+import 'package:hkdigiskill_admin/data/models/settings_binding.dart';
+import 'package:hkdigiskill_admin/data/models/users_binding.dart';
 import 'package:hkdigiskill_admin/routes/routes.dart';
 import 'package:hkdigiskill_admin/routes/routes_middleware.dart';
 import 'package:hkdigiskill_admin/screens/banners/all_banners/all_banners.dart';
 import 'package:hkdigiskill_admin/screens/banners/create_banner/create_banner.dart';
 import 'package:hkdigiskill_admin/screens/banners/edit_banner/edit_banner.dart';
+import 'package:hkdigiskill_admin/screens/blog/all_blogs/all_blogs.dart';
+import 'package:hkdigiskill_admin/screens/blog/create_blog/create_blog.dart';
+import 'package:hkdigiskill_admin/screens/blog/edit_blog/edit_blog.dart';
 import 'package:hkdigiskill_admin/screens/category/all_category/category.dart';
 import 'package:hkdigiskill_admin/screens/category/create_category/create_category.dart';
 import 'package:hkdigiskill_admin/screens/category/edit_category/edit_category.dart';
 import 'package:hkdigiskill_admin/screens/coupon/all_coupons/all_coupons.dart';
 import 'package:hkdigiskill_admin/screens/coupon/create_coupon/create_coupon.dart';
+import 'package:hkdigiskill_admin/screens/coupon/update_coupon/edit_coupon.dart';
 // import 'package:hkdigiskill_admin/screens/coupon/create_coupon/create_coupon.dart';
 import 'package:hkdigiskill_admin/screens/course/faq/all_faq/all_faq.dart';
 import 'package:hkdigiskill_admin/screens/course/faq/create_faq/create_faq.dart';
 import 'package:hkdigiskill_admin/screens/course/faq/edit_faq/edit_faq.dart';
+import 'package:hkdigiskill_admin/screens/course/testimonials/all_testimonials/all_testimonials.dart';
+import 'package:hkdigiskill_admin/screens/course/testimonials/create_testimonial/create_testimonial.dart';
+import 'package:hkdigiskill_admin/screens/course/testimonials/edit_testimonial/edit_testimonial.dart';
 import 'package:hkdigiskill_admin/screens/dashboard/dashboard.dart';
 import 'package:hkdigiskill_admin/screens/deleted_accounts/deleted_accounts.dart';
 import 'package:hkdigiskill_admin/screens/faq/all_faq/all_faq.dart';
@@ -42,16 +52,24 @@ import 'package:hkdigiskill_admin/screens/login/login_page.dart';
 import 'package:hkdigiskill_admin/screens/media/media.dart';
 import 'package:hkdigiskill_admin/screens/otp/otp.dart';
 import 'package:hkdigiskill_admin/screens/our_trusted_partners/all_partners/all_partners.dart';
+import 'package:hkdigiskill_admin/screens/our_trusted_partners/create_partners/create_partners.dart';
+import 'package:hkdigiskill_admin/screens/our_trusted_partners/edit_partners/edit_partners.dart';
 import 'package:hkdigiskill_admin/screens/reset_password/reset_password.dart';
+import 'package:hkdigiskill_admin/screens/settings/settings.dart';
 import 'package:hkdigiskill_admin/screens/testimonials/all_testimonials/all_testimonials.dart';
 import 'package:hkdigiskill_admin/screens/testimonials/create_testimonial/create_testimonial.dart';
 import 'package:hkdigiskill_admin/screens/testimonials/edit_testimonial/edit_testimonial.dart';
 import 'package:hkdigiskill_admin/screens/transactions/transactions.dart';
+import 'package:hkdigiskill_admin/screens/users/users.dart';
 import 'package:hkdigiskill_admin/screens/workshop/all_workshop/all_workshop.dart';
 import 'package:hkdigiskill_admin/screens/workshop/create_workshop/create_workshop.dart';
+import 'package:hkdigiskill_admin/screens/workshop/edit_workshop/edit_workshop.dart';
 import 'package:hkdigiskill_admin/screens/workshop/faq/all_faq/all_faq.dart';
 import 'package:hkdigiskill_admin/screens/workshop/faq/create_faq/create_faq.dart';
 import 'package:hkdigiskill_admin/screens/workshop/faq/edit_faq/edit_faq.dart';
+import 'package:hkdigiskill_admin/screens/workshop/testimonials/all_testimonials/all_testimonials.dart';
+import 'package:hkdigiskill_admin/screens/workshop/testimonials/create_testimonial/create_testimonial.dart';
+import 'package:hkdigiskill_admin/screens/workshop/testimonials/edit_testimonial/edit_testimonial.dart';
 
 class AppRoute {
   static final List<GetPage> pages = [
@@ -120,12 +138,12 @@ class AppRoute {
       binding: WorkshopBinding(),
       middlewares: [RoutesMiddleware()],
     ),
-    // GetPage(
-    //   name: AdminRoutes.editWorkshop,
-    //   page: () => EditWorkshopScreen(),
-    //   binding: WorkshopBinding(),
-    //   middlewares: [RoutesMiddleware()],
-    // ),
+    GetPage(
+      name: AdminRoutes.editWorkshop,
+      page: () => EditWorkshopScreen(),
+      binding: WorkshopBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
     GetPage(
       name: AdminRoutes.wFaq,
       page: () => WorkshopAllFaqScreen(),
@@ -141,6 +159,24 @@ class AppRoute {
     GetPage(
       name: AdminRoutes.wEditFaq,
       page: () => WorkshopEditFaqScreen(),
+      binding: WorkshopBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+    GetPage(
+      name: AdminRoutes.wTestimonials,
+      page: () => WorkshopAllTestimonialsScreen(),
+      binding: WorkshopBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+    GetPage(
+      name: AdminRoutes.wCreateTestimonial,
+      page: () => WorkshopCreateTestimonialScreen(),
+      binding: WorkshopBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+    GetPage(
+      name: AdminRoutes.wEditTestimonial,
+      page: () => WorkshopEditTestimonialScreen(),
       binding: WorkshopBinding(),
       middlewares: [RoutesMiddleware()],
     ),
@@ -254,8 +290,20 @@ class AppRoute {
       binding: PartnersBinding(),
       middlewares: [RoutesMiddleware()],
     ),
+    GetPage(
+      name: AdminRoutes.editPartners,
+      page: () => EditPartners(),
+      binding: PartnersBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+    GetPage(
+      name: AdminRoutes.createPartners,
+      page: () => CreatePartners(),
+      binding: PartnersBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
 
-    // Course Faq
+    // Course
     GetPage(
       name: AdminRoutes.cFaq,
       page: () => CourseAllFaqScreen(),
@@ -274,6 +322,24 @@ class AppRoute {
       binding: CourseBinding(),
       middlewares: [RoutesMiddleware()],
     ),
+    GetPage(
+      name: AdminRoutes.cTestimonials,
+      page: () => CourseAllTestimonialsScreen(),
+      binding: CourseBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+    GetPage(
+      name: AdminRoutes.cCreateTestimonial,
+      page: () => CourseCreateTestimonialScreen(),
+      binding: CourseBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+    GetPage(
+      name: AdminRoutes.cEditTestimonial,
+      page: () => CourseEditTestimonialScreen(),
+      binding: CourseBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
 
     // Coupon
     GetPage(
@@ -288,11 +354,47 @@ class AppRoute {
       binding: CouponBinding(),
       middlewares: [RoutesMiddleware()],
     ),
-    // GetPage(
-    //   name: AdminRoutes.editCouponCode,
-    //   page: () => EditCoupon(),
-    //   binding: CouponBinding(),
-    //   middlewares: [RoutesMiddleware()],
-    // ),
+    GetPage(
+      name: AdminRoutes.editCouponCode,
+      page: () => EditCouponScreen(),
+      binding: CouponBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+
+    // Blog
+    GetPage(
+      name: AdminRoutes.blog,
+      page: () => AllBlogsScreen(),
+      binding: BlogBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+    GetPage(
+      name: AdminRoutes.createBlog,
+      page: () => CreateBlogScreen(),
+      binding: BlogBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+    GetPage(
+      name: AdminRoutes.editBlog,
+      page: () => EditBlogScreen(),
+      binding: BlogBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+
+    // Users
+    GetPage(
+      name: AdminRoutes.users,
+      page: () => UsersScreen(),
+      binding: UsersBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
+
+    // Settings
+    GetPage(
+      name: AdminRoutes.settings,
+      page: () => SettingsScreen(),
+      binding: SettingsBinding(),
+      middlewares: [RoutesMiddleware()],
+    ),
   ];
 }

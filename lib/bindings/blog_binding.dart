@@ -6,8 +6,8 @@ import 'package:hkdigiskill_admin/screens/blog/edit_blog/controllers/edit_blog_c
 class BlogBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => BlogsController());
-    Get.lazyPut(() => CreateBlogController());
-    Get.lazyPut(() => EditBlogController());
+    Get.lazyPut<BlogsController>(() => BlogsController());
+    Get.lazyPut<CreateBlogController>(() => CreateBlogController());
+    Get.lazyPut<EditBlogController>(() => EditBlogController());
   }
 }

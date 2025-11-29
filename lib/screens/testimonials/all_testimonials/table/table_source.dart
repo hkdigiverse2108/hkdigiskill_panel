@@ -33,24 +33,38 @@ class TestimonialsDataSource extends DataTableSource {
         ),
         DataCell(Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis)),
         DataCell(
-          Text(
-            item.designation,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+          Text(item.designation, maxLines: 1, overflow: TextOverflow.ellipsis),
         ),
         DataCell(Text(item.rate.toString())),
         DataCell(
-          Switch(
-            value: item.isFeatured,
-            onChanged: (_) => controller.toggleFeatured(item.id),
+          GestureDetector(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+              decoration: BoxDecoration(
+                color: item.isFeatured
+                    ? Colors.green.withOpacity(0.15)
+                    : Colors.grey.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(AdminSizes.borderRadiusMd),
+                border: Border.all(
+                  color: item.isFeatured ? Colors.green : Colors.grey,
+                ),
+              ),
+              child: Text(
+                item.isFeatured ? "Featured" : "Normal",
+                style: TextStyle(
+                  color: item.isFeatured ? Colors.green : Colors.grey,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
           ),
         ),
         DataCell(
           AdminTableActionIconButtons(
             edit: true,
             delete: true,
-            onEditPressed: () => Get.toNamed(AdminRoutes.editTestimonial, arguments: item),
+            onEditPressed: () =>
+                Get.toNamed(AdminRoutes.editTestimonial, arguments: item),
             onDeletePressed: () {
               ConfirmDialog.show(
                 title: 'Delete Testimonial',

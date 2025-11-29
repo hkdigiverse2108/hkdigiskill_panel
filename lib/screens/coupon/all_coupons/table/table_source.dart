@@ -48,7 +48,7 @@ class CouponDataSource extends DataTableSource {
             edit: true,
             delete: true,
             onEditPressed: () =>
-                Get.toNamed(AdminRoutes.cEditFaq, arguments: coupon),
+                Get.toNamed(AdminRoutes.editCouponCode, arguments: coupon),
             onDeletePressed: () {
               ConfirmDialog.show(
                 title: "Delete Coupon",

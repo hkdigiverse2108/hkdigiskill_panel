@@ -27,6 +27,7 @@ class EditGalleryForm extends GetView<EditGalleryController> {
           width: 700,
           padding: EdgeInsets.all(AdminSizes.defaultSpace),
           child: Form(
+            key: controller.galleryFormKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -98,11 +99,17 @@ class EditGalleryForm extends GetView<EditGalleryController> {
                   ),
                 ),
                 SizedBox(height: AdminSizes.spaceBtwInputFields * 2),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => controller.updateItem(item),
-                    child: const Text('Update'),
+                Obx(
+                  () => SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => controller.isLoading.value
+                          ? null
+                          : controller.updateItem(item),
+                      child: controller.isLoading.value
+                          ? CircularProgressIndicator()
+                          : const Text('Update'),
+                    ),
                   ),
                 ),
               ],

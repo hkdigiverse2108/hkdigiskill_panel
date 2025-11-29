@@ -1,63 +1,60 @@
 class TestimonialModel {
-  final int id;
-  final String name;
-  final String designation;
-  final String? description;
-  final String? image;
-  final int rate; // 1-5
-  final bool isFeatured;
+  String id;
+  String name;
+  String designation;
+  int rate;
+  bool isFeatured;
+  String type;
+  bool isDeleted;
+  bool isBlocked;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String? image;
+  String? description;
 
   TestimonialModel({
     required this.id,
     required this.name,
     required this.designation,
-    this.description,
-    this.image,
     required this.rate,
-    this.isFeatured = false,
+    required this.isFeatured,
+    required this.type,
+    required this.isDeleted,
+    required this.isBlocked,
+    required this.createdAt,
+    required this.updatedAt,
+    this.image,
+    this.description,
   });
 
-  factory TestimonialModel.fromJson(Map<String, dynamic> json) {
-    return TestimonialModel(
-      id: json['id'],
-      name: json['name'],
-      designation: json['designation'],
-      description: json['description'],
-      image: json['image'],
-      rate: (json['rate'] ?? 0).toInt(),
-      isFeatured: json['isFeatured'] ?? false,
-    );
-  }
+  factory TestimonialModel.fromJson(Map<String, dynamic> json) =>
+      TestimonialModel(
+        id: json["_id"],
+        name: json["name"],
+        designation: json["designation"],
+        rate: json["rate"],
+        isFeatured: json["isFeatured"],
+        type: json["type"],
+        isDeleted: json["isDeleted"],
+        isBlocked: json["isBlocked"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        image: json["image"],
+        description: json["description"],
+      );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'designation': designation,
-      'description': description,
-      'image': image,
-      'rate': rate,
-      'isFeatured': isFeatured,
-    };
-  }
-
-  TestimonialModel copyWith({
-    int? id,
-    String? name,
-    String? designation,
-    String? description,
-    String? image,
-    int? rate,
-    bool? isFeatured,
-  }) {
-    return TestimonialModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      designation: designation ?? this.designation,
-      description: description ?? this.description,
-      image: image ?? this.image,
-      rate: rate ?? this.rate,
-      isFeatured: isFeatured ?? this.isFeatured,
-    );
-  }
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "name": name,
+    "designation": designation,
+    "rate": rate,
+    "isFeatured": isFeatured,
+    "type": type,
+    "isDeleted": isDeleted,
+    "isBlocked": isBlocked,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+    "image": image,
+    "description": description,
+  };
 }

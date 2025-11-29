@@ -99,7 +99,7 @@ class AllCouponsController extends GetxController {
         decoder: (json) {},
       );
       AdminLoaders.successSnackBar(
-        title: "Faq",
+        title: "Coupon",
         message: "Deleted successfully",
       );
       fetchCoupons();

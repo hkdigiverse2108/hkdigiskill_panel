@@ -1,8 +1,10 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill_admin/common/widgets/animations/animation_loader.dart';
 import 'package:hkdigiskill_admin/common/widgets/data_table/paginated_data_table.dart';
 import 'package:hkdigiskill_admin/screens/category/all_category/table/table_source.dart';
+import 'package:hkdigiskill_admin/utils/constants/image_strings.dart';
 import 'package:hkdigiskill_admin/utils/constants/sizes.dart';
 
 import '../controllers/category_controller.dart';
@@ -15,6 +17,16 @@ class CategoryTable extends StatelessWidget {
     final controller = CategoryController.instance;
 
     return Obx(() {
+      if (controller.isLoading.value) {
+        return Center(
+          child: AdminAnimationLoaderWidget(
+            text: 'Loading...',
+            animation: AdminImages.loadingAnimation,
+            height: 200,
+            width: 200,
+          ),
+        );
+      }
       Visibility(
         visible: false,
         child: Text(controller.filteredDataList.length.toString()),

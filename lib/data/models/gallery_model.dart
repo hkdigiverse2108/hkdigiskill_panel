@@ -1,45 +1,43 @@
 class GalleryModel {
-  final int id;
-  final String title;
-  final List<String> images; // urls
-  final String? description;
+  String id;
+  List<String> images;
+  String title;
+  String? description;
+  bool isDeleted;
+  bool isBlocked;
+  DateTime createdAt;
+  DateTime updatedAt;
 
   GalleryModel({
     required this.id,
-    required this.title,
     required this.images,
+    required this.title,
     this.description,
+    required this.isDeleted,
+    required this.isBlocked,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  GalleryModel copyWith({
-    int? id,
-    String? title,
-    List<String>? images,
-    String? description,
-  }) {
-    return GalleryModel(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      images: images ?? this.images,
-      description: description ?? this.description,
-    );
-  }
+  factory GalleryModel.fromJson(Map<String, dynamic> json) => GalleryModel(
+    id: json["_id"],
+    images: List<String>.from(json["images"].map((x) => x)),
+    title: json["title"],
+    description: json["description"],
+    isDeleted: json["isDeleted"],
+    isBlocked: json["isBlocked"],
+    createdAt: DateTime.parse(json["createdAt"]),
+    updatedAt: DateTime.parse(json["updatedAt"]),
+  );
 
-  factory GalleryModel.fromJson(Map<String, dynamic> json) {
-    return GalleryModel(
-      id: json['id'] as int,
-      title: json['title'] as String,
-      images: (json['images'] as List<dynamic>).map((e) => e as String).toList(),
-      description: json['description'] as String?,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'images': images,
-      'description': description,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "images": List<dynamic>.from(images.map((x) => x)),
+    "title": title,
+    "description": description,
+    "isDeleted": isDeleted,
+    "isBlocked": isBlocked,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+  };
 }

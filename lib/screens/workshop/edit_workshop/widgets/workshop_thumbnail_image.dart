@@ -1,0 +1,70 @@
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:hkdigiskill_admin/common/widgets/containers/rounded_container.dart';
+import 'package:hkdigiskill_admin/common/widgets/images/rounded_image.dart';
+import 'package:hkdigiskill_admin/screens/workshop/edit_workshop/controllers/edit_workshop_controller.dart';
+import 'package:hkdigiskill_admin/utils/constants/colors.dart';
+import 'package:hkdigiskill_admin/utils/constants/enums.dart';
+import 'package:hkdigiskill_admin/utils/constants/image_strings.dart';
+import 'package:hkdigiskill_admin/utils/constants/sizes.dart';
+
+class WorkshopThumbnailImage extends StatelessWidget {
+  const WorkshopThumbnailImage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = EditWorkshopController.instance;
+    return AdminRoundedContainer(
+      child: Column(
+        children: [
+          Text(
+            "Workshop Thumbnail",
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          Gap(AdminSizes.spaceBtwItems),
+
+          Obx(
+            () => AdminRoundedContainer(
+              height: 270,
+              backgroundColor: AdminColors.primaryBackground,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: AdminRoundedImage(
+                            imageType: controller.thumbnailImage.value.isEmpty
+                                ? ImageType.asset
+                                : ImageType.network,
+                            width: 220,
+                            height: 220,
+                            image: controller.thumbnailImage.value.isEmpty
+                                ? AdminImages.defaultImage
+                                : controller.thumbnailImage.value,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Gap(AdminSizes.spaceBtwItems),
+          SizedBox(
+            child: ElevatedButton(
+              onPressed: () {
+                controller.selectThumbnailImage();
+              },
+              child: const Text("Add Thumbnail"),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

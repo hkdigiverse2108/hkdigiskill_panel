@@ -1,6 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill_admin/common/widgets/loaders/loaders.dart';
 import 'package:hkdigiskill_admin/data/models/gallery_model.dart';
+import 'package:hkdigiskill_admin/data/repositories/network_manager.dart';
+import 'package:hkdigiskill_admin/data/services/api_service.dart';
+import 'package:hkdigiskill_admin/data/services/storage_service.dart';
+import 'package:hkdigiskill_admin/utils/constants/api_constants.dart';
 
 class GalleryController extends GetxController {
   static GalleryController get instance => Get.find();
@@ -9,6 +16,9 @@ class GalleryController extends GetxController {
   final sortColumnIndex = 0.obs;
 
   final isLoading = false.obs;
+
+  final apiService = ApiService(baseUrl: ApiConstants.baseUrl);
+  final storageService = AdminStorageService();
 
   final dataList = <GalleryModel>[].obs;
   final filteredDataList = <GalleryModel>[].obs;
@@ -20,19 +30,39 @@ class GalleryController extends GetxController {
     fetchItems();
   }
 
-  void fetchItems() {
-    dataList.addAll(
-      List.generate(
-        12,
-        (i) => GalleryModel(
-          id: i + 1,
-          title: 'Gallery ${i + 1}',
-          images: List.generate((i % 5) + 1, (j) => ''),
-          description: i % 3 == 0 ? 'Optional description ${i + 1}' : null,
-        ),
-      ),
-    );
-    filteredDataList.assignAll(dataList);
+  void fetchItems() async {
+    try {
+      isLoading.value = true;
+      final isConnected = await NetworkManager.instance.isConnected();
+
+      if (!isConnected) {
+        AdminLoaders.errorSnackBar(
+          title: "No Internet Connection",
+          message: "Please check your internet connection and try again.",
+        );
+        return;
+      }
+
+      final response = await apiService.get(
+        path: ApiConstants.gallery,
+        headers: {"authorization": storageService.token!},
+        decoder: (json) {
+          final data = json['data']['gallery_data'] as List;
+          return data.map((e) => GalleryModel.fromJson(e)).toList();
+        },
+      );
+
+      dataList.assignAll(response);
+      filteredDataList.assignAll(dataList);
+    } catch (e) {
+      log(e.toString());
+      AdminLoaders.errorSnackBar(
+        title: "Error",
+        message: "Something went wrong. Please try again.",
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   void sort(int columnIndex, bool ascending) {
@@ -66,8 +96,40 @@ class GalleryController extends GetxController {
     );
   }
 
-  void deleteItem(int id) {
-    dataList.removeWhere((e) => e.id == id);
-    filteredDataList.removeWhere((e) => e.id == id);
+  void deleteItem(String id) async {
+    try {
+      isLoading.value = true;
+      final isConnected = await NetworkManager.instance.isConnected();
+
+      if (!isConnected) {
+        AdminLoaders.errorSnackBar(
+          title: "No Internet Connection",
+          message: "Please check your internet connection and try again.",
+        );
+        return;
+      }
+
+      final response = await apiService.delete(
+        path: "${ApiConstants.galleryDelete}/$id",
+        headers: {"authorization": storageService.token!},
+        decoder: (json) => json as Map<String, dynamic>,
+      );
+
+      if (response['status'] == 200) {
+        AdminLoaders.successSnackBar(
+          title: "Success",
+          message: "Gallery deleted successfully.",
+        );
+        fetchItems();
+      }
+    } catch (e) {
+      log(e.toString());
+      AdminLoaders.errorSnackBar(
+        title: "Delete Failed",
+        message: "Something went wrong. Please try again.",
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

@@ -14,15 +14,21 @@ class ApiConstants {
   static const String category = '/course-category/all';
   static const String categoryCreate = '/course-category/add';
   static const String categoryUpdate = '/course-category/edit';
-  static const String categoryDelete = '/course-category';
+  static const String categoryDelete = '/course-category/delete';
 
   // Get In Touch
   static const String getInTouch = '/get-in-touch/all';
   static const String getInTouchUpdate = '/get-in-touch/edit';
   static const String getInTouchDelete = '/get-in-touch/delete';
 
+  // Workshop
+  static const String workshop = '/workshop/all';
+  static const String workshopCreate = '/workshop/add';
+  static const String workshopUpdate = '/workshop/edit';
+  static const String workshopDelete = '/workshop/delete';
+
   // FAQ
-  static String faqWithType(FaqType type) => '/faq/all?type=${type.name}';
+  static String faqWithType(DashType type) => '/faq/all?type=${type.name}';
   static const String faqCreate = '/faq/add';
   static const String faqUpdate = '/faq/edit';
   static const String faqDelete = '/faq/delete';
@@ -37,4 +43,44 @@ class ApiConstants {
   static const String media = '/upload/images';
   static const String mediaDelete = '/upload';
   static const String mediaUpload = '/upload';
+
+  // Banner
+  static const String banner = '/hero-banner/all';
+  static const String bannerCreate = '/hero-banner/add';
+  static const String bannerUpdate = '/hero-banner/edit';
+  static const String bannerDelete = '/hero-banner/delete';
+
+  // Partner
+  static const String partner = '/trusted-partner/all';
+  static const String partnerCreate = '/trusted-partner/add';
+  static const String partnerUpdate = '/trusted-partner/edit';
+  static const String partnerDelete = '/trusted-partner/delete';
+
+  // testimonials
+  static String testimonials(DashType type) =>
+      '/testimonial/all?type=${type.name}';
+  static const String testimonialsCreate = '/testimonial/add';
+  static const String testimonialsUpdate = '/testimonial/edit';
+  static const String testimonialsDelete = '/testimonial/delete';
+
+  // Blog
+  static const String blog = '/blog/all';
+  static const String blogCreate = '/blog/add';
+  static const String blogUpdate = '/blog/edit';
+  static const String blogDelete = '/blog/delete';
+
+  // Gallery
+  static const String gallery = '/gallery/all';
+  static const String galleryCreate = '/gallery/add';
+  static const String galleryUpdate = '/gallery/edit';
+  static const String galleryDelete = '/gallery/delete';
+
+  // Users
+  static const String users = '/user/all';
+  static const String usersDelete = '/user/delete/';
+  static const String deletedAccounts = '/user/delete/all';
+
+  // Settings
+  static const String settings = '/settings/all';
+  static const String settingsUpdate = '/settings/add-edit';
 }

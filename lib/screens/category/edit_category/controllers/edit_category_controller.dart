@@ -71,7 +71,7 @@ class EditCategoryController extends GetxController {
           "description": descriptionController.text,
           "image": pickedImagePath.value,
           "isFeatured": isFeatured.value,
-          "id": category.id,
+          "courseCategoryId": category.id,
         },
         decoder: (json) => json as Map<String, dynamic>,
       );
@@ -83,8 +83,14 @@ class EditCategoryController extends GetxController {
           title: "Success",
           message: "Category created successfully.",
         );
-      } else {}
+      } else {
+        AdminLoaders.errorSnackBar(
+          title: "Error",
+          message: "Something went wrong. Please try again.",
+        );
+      }
     } catch (e) {
+      log(e.toString());
       AdminLoaders.errorSnackBar(
         title: "Error",
         message: "Something went wrong. Please try again.",

@@ -1,13 +1,22 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill_admin/common/widgets/loaders/loaders.dart';
 import 'package:hkdigiskill_admin/data/models/partners_model.dart';
-import 'package:hkdigiskill_admin/utils/constants/image_strings.dart';
+import 'package:hkdigiskill_admin/data/services/api_service.dart';
+import 'package:hkdigiskill_admin/data/services/storage_service.dart';
+import 'package:hkdigiskill_admin/utils/constants/api_constants.dart';
 
 class AllPartnersController extends GetxController {
   static AllPartnersController get instance => Get.find();
+  var isLoading = false.obs;
 
   var sortAscending = true.obs;
   var sortColumnIndex = 0.obs;
+
+  final apiService = ApiService(baseUrl: ApiConstants.baseUrl);
+  final storageService = AdminStorageService();
 
   var dataList = <PartnersModel>[].obs;
   var filteredDataList = <PartnersModel>[].obs;
@@ -16,24 +25,32 @@ class AllPartnersController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchWorkshops();
+    fetchPartners();
   }
 
-  void fetchWorkshops() {
-    // TODO: Replace with actual API call
-    dataList.addAll(
-      List.generate(
-        20,
-        (index) => PartnersModel(
-          id: index + 1,
-          name: "Partner ${index + 1}",
-          description: 'Partner Description ${index + 1}',
-          image: AdminImages.profile,
-        ),
-      ),
-    );
+  void fetchPartners() async {
+    try {
+      isLoading.value = true;
+      final response = await apiService.get(
+        path: ApiConstants.partner,
+        headers: {"Authorization": storageService.token!},
+        decoder: (json) {
+          final data = json['data']['trusted_partner_data'] as List;
+          final partnersList = data
+              .map((json) => PartnersModel.fromJson(json))
+              .toList();
+          return partnersList;
+        },
+      );
 
-    filteredDataList.assignAll(dataList);
+      dataList.assignAll(response);
+      filteredDataList.assignAll(response);
+    } catch (e) {
+      log(e.toString());
+      AdminLoaders.errorSnackBar(title: "Get Partners error", message: "$e");
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   void sort(int columnIndex, bool ascending) {
@@ -64,10 +81,27 @@ class AllPartnersController extends GetxController {
     );
   }
 
-  void deleteWorkshop(int id) {
-    // TODO: Implement delete functionality with API call
-    dataList.removeWhere((partners) => partners.id == id);
-    filteredDataList.removeWhere((partners) => partners.id == id);
+  void deletePartner(String id) async {
+    try {
+      isLoading.value = true;
+      final response = await apiService.delete(
+        path: "${ApiConstants.partnerDelete}/$id",
+        headers: {"Authorization": storageService.token!},
+        decoder: (json) => json as Map<String, dynamic>,
+      );
+      if (response['status'] == 200) {
+        fetchPartners();
+        AdminLoaders.successSnackBar(
+          title: "Partners",
+          message: "Partners deleted successfully",
+        );
+      }
+    } catch (e) {
+      log(e.toString());
+      AdminLoaders.errorSnackBar(title: "Delete Partners error", message: "$e");
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   @override

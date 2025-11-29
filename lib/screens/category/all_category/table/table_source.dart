@@ -21,9 +21,9 @@ class CategoryDataSource extends DataTableSource {
 
     return DataRow2(
       onTap: () {},
-      // selected: controller.selectedRows[index],
+      // selected: controllers.selectedRows[index],
       // onSelectChanged: (value) {
-      //   controller.selectedRows[index] = value ?? false;
+      //   controllers.selectedRows[index] = value ?? false;
       //   notifyListeners();
       // },
       cells: [

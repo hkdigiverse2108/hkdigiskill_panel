@@ -18,6 +18,9 @@ class AdminRoutes {
   static const wFaq = '/workshopFaq';
   static const wCreateFaq = '/workshopFaq-create';
   static const wEditFaq = '/workshopFaq-edit';
+  static const wTestimonials = '/workshop-testimonials';
+  static const wCreateTestimonial = '/workshop-testimonials-create';
+  static const wEditTestimonial = '/workshop-testimonials-edit';
 
   // media
   static const media = '/media';
@@ -27,22 +30,37 @@ class AdminRoutes {
   static const createCouponCode = '/coupon-code-create';
   static const editCouponCode = '/coupon-code-edit';
 
+  // Trusted Partners
+  static const trustedPartners = '/trusted-partners';
+  static const editPartners = '/edit-partners';
+  static const createPartners = '/create-partners';
+
   static const course = '/course';
   static const wWorkshops = '/workshops';
   static const wCurriculum = '/workshopsCurriculum';
   static const wBuy = '$workshop/buy';
-  static const wTestimonials = '$workshop/testimonials';
   static const cCourses = '$course/courses';
   static const cLessons = '$course/lessons';
   static const cCurriculum = '$course/curriculum';
+
+  // Course
   static const cBuy = '$course/buy';
   static const cFaq = '/course-faq';
   static const cCreateFaq = '/course-faq-create';
   static const cEditFaq = '/course-faq-edit';
-  static const cTestimonials = '$course/testimonials';
+  static const cTestimonials = '/course-testimonials';
+  static const cCreateTestimonial = '/course-testimonials-create';
+  static const cEditTestimonial = '/course-testimonials-edit';
 
+  // Deleted Account
   static const deletedAccounts = '/deleted-accounts';
-  static const trustedPartners = '/trusted-partners';
+
+  // Blog
+  static const blog = '/blog';
+  static const createBlog = '/blog-create';
+  static const editBlog = '/blog-edit';
+
+  // FAQ
   static const faq = '/faq';
   static const createFaq = '/faq-create';
   static const editFaq = '/faq-edit';
@@ -50,7 +68,7 @@ class AdminRoutes {
   static const createTestimonial = '/testimonials-create';
   static const editTestimonial = '/testimonials-edit';
   static const adminUsers = '/admin-users';
-  static const blog = '/blog';
+
   static const getInTouch = '/get-in-touch';
   static const editGetInTouch = '/get-in-touch-edit';
   static const gallery = '/gallery';

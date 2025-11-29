@@ -29,7 +29,7 @@ class WorkshopCreateFaqController extends GetxController {
           "question": questionController.text,
           "answer": answerController.text,
           "isFeatured": isFeatured.value,
-          "type": FaqType.workshop.name,
+          "type": DashType.workshop.name,
         },
         decoder: (json) {},
       );

@@ -1,28 +1,59 @@
-class DeletedAccountModel {
-  final String id;
-  final String name;
-  final String email;
-  final String password;
-  final String reason;
-  final int rate;
+class DeletedAccount {
+  String id;
+  UserId userId;
+  String fullName;
+  String email;
+  String reason;
+  int rate;
+  bool isDeleted;
+  DateTime createdAt;
+  DateTime updatedAt;
 
-  DeletedAccountModel({
+  DeletedAccount({
     required this.id,
-    required this.name,
+    required this.userId,
+    required this.fullName,
     required this.email,
-    required this.password,
     required this.reason,
     required this.rate,
+    required this.isDeleted,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  factory DeletedAccountModel.fromJson(Map<String, dynamic> json) {
-    return DeletedAccountModel(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-      password: json['password'],
-      reason: json['reason'],
-      rate: json['rate'],
-    );
-  }
+  factory DeletedAccount.fromJson(Map<String, dynamic> json) => DeletedAccount(
+    id: json["_id"],
+    userId: UserId.fromJson(json["userId"]),
+    fullName: json["fullName"],
+    email: json["email"],
+    reason: json["reason"],
+    rate: json["rate"],
+    isDeleted: json["isDeleted"],
+    createdAt: DateTime.parse(json["createdAt"]),
+    updatedAt: DateTime.parse(json["updatedAt"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "userId": userId.toJson(),
+    "fullName": fullName,
+    "email": email,
+    "reason": reason,
+    "rate": rate,
+    "isDeleted": isDeleted,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+  };
+}
+
+class UserId {
+  String id;
+  String fullName;
+
+  UserId({required this.id, required this.fullName});
+
+  factory UserId.fromJson(Map<String, dynamic> json) =>
+      UserId(id: json["_id"], fullName: json["fullName"]);
+
+  Map<String, dynamic> toJson() => {"_id": id, "fullName": fullName};
 }

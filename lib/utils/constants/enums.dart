@@ -15,6 +15,6 @@ enum MediaCategory {
   instructors,
 }
 
-enum FaqType { course, workshop, home }
+enum DashType { course, workshop, home }
 
 enum CouponType { percentage, amount }

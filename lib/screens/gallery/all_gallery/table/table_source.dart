@@ -10,6 +10,7 @@ import 'package:hkdigiskill_admin/utils/constants/colors.dart';
 import 'package:hkdigiskill_admin/utils/constants/enums.dart';
 import 'package:hkdigiskill_admin/utils/constants/image_strings.dart';
 import 'package:hkdigiskill_admin/utils/constants/sizes.dart';
+import 'package:hkdigiskill_admin/utils/helpers/helpers.dart';
 
 class GalleryDataSource extends DataTableSource {
   final controller = GalleryController.instance;
@@ -22,7 +23,9 @@ class GalleryDataSource extends DataTableSource {
 
     return DataRow2(
       cells: [
-        DataCell(Text(item.title, maxLines: 1, overflow: TextOverflow.ellipsis)),
+        DataCell(
+          Text(item.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+        ),
         DataCell(
           Row(
             children: [
@@ -38,16 +41,18 @@ class GalleryDataSource extends DataTableSource {
                 ),
                 const SizedBox(width: 6),
               ],
-              if (item.images.length > 3)
-                Text('+${item.images.length - 3}')
+              if (item.images.length > 3) Text('+${item.images.length - 3}'),
             ],
           ),
         ),
+        DataCell(Text(item.description ?? '')),
+        DataCell(Text(AdminHelperFunctions.getFormattedDate(item.createdAt))),
         DataCell(
           AdminTableActionIconButtons(
             edit: true,
             delete: true,
-            onEditPressed: () => Get.toNamed(AdminRoutes.editGallery, arguments: item),
+            onEditPressed: () =>
+                Get.toNamed(AdminRoutes.editGallery, arguments: item),
             onDeletePressed: () {
               ConfirmDialog.show(
                 title: 'Delete Gallery',

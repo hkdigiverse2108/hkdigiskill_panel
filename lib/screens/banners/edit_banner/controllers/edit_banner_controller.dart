@@ -1,7 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill_admin/common/widgets/loaders/loaders.dart';
 import 'package:hkdigiskill_admin/data/models/banner_model.dart';
+import 'package:hkdigiskill_admin/data/models/image_model.dart';
+import 'package:hkdigiskill_admin/data/services/api_service.dart';
+import 'package:hkdigiskill_admin/data/services/storage_service.dart';
 import 'package:hkdigiskill_admin/screens/banners/all_banners/controllers/banners_controller.dart';
+import 'package:hkdigiskill_admin/screens/media/controllers/media_controller.dart';
+import 'package:hkdigiskill_admin/utils/constants/api_constants.dart';
 
 class EditBannerController extends GetxController {
   final isLoading = false.obs;
@@ -11,41 +19,96 @@ class EditBannerController extends GetxController {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController linkController = TextEditingController();
 
+  final editBannerFormKey = GlobalKey<FormState>();
+
+  final apiService = ApiService(baseUrl: ApiConstants.baseUrl);
+  final storageService = AdminStorageService();
+
   final imagePrimary = ''.obs;
   final imageSecondary = ''.obs;
 
-  void onPickPrimary() {}
-  void onPickSecondary() {}
+  final bController = BannersController.instance;
+
+  void onPickPrimary() async {
+    final controller = Get.put(MediaController());
+    List<ImageModel>? selectedImages = await controller.selectImagesFromMedia();
+
+    if (selectedImages != null && selectedImages.isNotEmpty) {
+      imagePrimary.value = selectedImages.first.url;
+    }
+  }
+
+  void onPickSecondary() async {
+    final controller = Get.put(MediaController());
+    List<ImageModel>? selectedImages = await controller.selectImagesFromMedia();
+
+    if (selectedImages != null && selectedImages.isNotEmpty) {
+      imageSecondary.value = selectedImages.first.url;
+    }
+  }
 
   void initItem(BannerModel item) {
     type.value = item.type;
     titleController.text = item.title ?? '';
     descriptionController.text = item.description ?? '';
     linkController.text = item.link ?? '';
-    imagePrimary.value = item.imagePrimary ?? '';
-    imageSecondary.value = item.imageSecondary ?? '';
+    imagePrimary.value = item.images?.first ?? '';
+    imageSecondary.value = item.images?.last ?? '';
   }
 
-  void updateItem(BannerModel item) {
-    final controller = BannersController.instance;
-    final updated = item.copyWith(
-      type: type.value,
-      title: type.value == BannerType.web ? titleController.text.trim() : null,
-      description: type.value == BannerType.web && descriptionController.text.trim().isNotEmpty
-          ? descriptionController.text.trim()
-          : null,
-      link: type.value == BannerType.app ? linkController.text.trim() : null,
-      imagePrimary: imagePrimary.value.isEmpty ? null : imagePrimary.value,
-      imageSecondary: type.value == BannerType.web && imageSecondary.value.isNotEmpty
-          ? imageSecondary.value
-          : null,
-    );
+  void updateItem(BannerModel item) async {
+    try {
+      isLoading.value = true;
 
-    final idx = controller.dataList.indexWhere((e) => e.id == item.id);
-    if (idx != -1) controller.dataList[idx] = updated;
-    final fidx = controller.filteredDataList.indexWhere((e) => e.id == item.id);
-    if (fidx != -1) controller.filteredDataList[fidx] = updated;
+      var body = {};
 
-    Get.back();
+      if (type.value == BannerType.web) {
+        body = {
+          "heroBannerId": item.id,
+          "type": type.value.name,
+          "title": titleController.text.trim(),
+          "description": descriptionController.text.trim(),
+          "images": [imagePrimary.value, imageSecondary.value],
+        };
+      } else {
+        body = {
+          "heroBannerId": item.id,
+          "type": type.value.name,
+          "link": linkController.text.trim(),
+          "images": [imagePrimary.value],
+        };
+      }
+
+      final res = await apiService.post(
+        path: ApiConstants.bannerUpdate,
+        headers: {"Authorization": storageService.token!},
+        body: body,
+        decoder: (json) {
+          return json as Map<String, dynamic>;
+        },
+      );
+
+      if (res['status'] == 200) {
+        bController.fetchBanners();
+        Get.back();
+        AdminLoaders.successSnackBar(
+          title: "Banner",
+          message: "Created successfully",
+        );
+      } else {
+        AdminLoaders.errorSnackBar(
+          title: "Banner",
+          message: "Failed to update banner",
+        );
+      }
+    } catch (e) {
+      log(e.toString());
+      AdminLoaders.errorSnackBar(
+        title: "Banner",
+        message: "Failed to update banner",
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

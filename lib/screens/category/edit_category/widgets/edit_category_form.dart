@@ -26,6 +26,7 @@ class EditCategoryForm extends GetView<EditCategoryController> {
           width: 500,
           padding: EdgeInsets.all(AdminSizes.defaultSpace),
           child: Form(
+            key: controller.editCategoryFormKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

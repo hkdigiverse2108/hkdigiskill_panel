@@ -18,6 +18,7 @@ class CreateTestimonialForm extends GetView<CreateTestimonialController> {
       width: 700,
       padding: EdgeInsets.all(AdminSizes.defaultSpace),
       child: Form(
+        key: controller.createTestimonialFormKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

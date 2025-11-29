@@ -41,7 +41,7 @@ class AllPartnersMobileScreen extends StatelessWidget {
                   // Table Header with Create Button (simplified for tablet)
                   AdminTableHeader(
                     buttonText: "Create Partner",
-                    onPressed: () => Get.toNamed(AdminRoutes.createWorkshop),
+                    onPressed: () => Get.toNamed(AdminRoutes.createPartners),
                     searchController:
                         AllPartnersController.instance.searchController,
                     onSearchChanged: (query) {

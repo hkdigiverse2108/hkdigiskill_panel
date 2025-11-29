@@ -27,6 +27,7 @@ class EditTestimonialForm extends GetView<EditTestimonialController> {
           width: 700,
           padding: EdgeInsets.all(AdminSizes.defaultSpace),
           child: Form(
+            key: controller.editTestimonialFormKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -37,7 +38,8 @@ class EditTestimonialForm extends GetView<EditTestimonialController> {
                 SizedBox(height: AdminSizes.spaceBtwSections),
                 TextFormField(
                   controller: controller.nameController,
-                  validator: (v) => AdminValidators.validateEmptyText('Name', v),
+                  validator: (v) =>
+                      AdminValidators.validateEmptyText('Name', v),
                   decoration: const InputDecoration(
                     labelText: 'Name',
                     prefixIcon: Icon(Iconsax.user),
@@ -46,7 +48,8 @@ class EditTestimonialForm extends GetView<EditTestimonialController> {
                 SizedBox(height: AdminSizes.spaceBtwInputFields),
                 TextFormField(
                   controller: controller.designationController,
-                  validator: (v) => AdminValidators.validateEmptyText('Designation', v),
+                  validator: (v) =>
+                      AdminValidators.validateEmptyText('Designation', v),
                   decoration: const InputDecoration(
                     labelText: 'Designation',
                     prefixIcon: Icon(Iconsax.briefcase),
@@ -108,11 +111,17 @@ class EditTestimonialForm extends GetView<EditTestimonialController> {
                   ),
                 ),
                 SizedBox(height: AdminSizes.spaceBtwInputFields * 2),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => controller.updateItem(item),
-                    child: const Text('Update'),
+                Obx(
+                  () => SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => controller.isLoading.value
+                          ? null
+                          : controller.updateItem(item),
+                      child: controller.isLoading.value
+                          ? const CircularProgressIndicator()
+                          : const Text('Update'),
+                    ),
                   ),
                 ),
               ],

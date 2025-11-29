@@ -1,106 +1,111 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill_admin/common/widgets/loaders/loaders.dart';
 import 'package:hkdigiskill_admin/data/models/blog_model.dart';
+import 'package:hkdigiskill_admin/data/repositories/network_manager.dart';
+import 'package:hkdigiskill_admin/data/services/api_service.dart';
+import 'package:hkdigiskill_admin/data/services/storage_service.dart';
+import 'package:hkdigiskill_admin/utils/constants/api_constants.dart';
 
 class BlogsController extends GetxController {
   static BlogsController get instance => Get.find();
 
-  final isLoading = false.obs;
-  final searchText = ''.obs;
-  final sortColumn = 'title'.obs;
-  final sortAscending = true.obs;
-  final filteredDataList = <BlogModel>[].obs;
-  final dataList = <BlogModel>[].obs;
-  final selectedRows = <BlogModel>[].obs;
+  var sortAscending = true.obs;
+  var sortColumnIndex = 0.obs;
+  var isLoading = false.obs;
+
+  final apiService = ApiService(baseUrl: ApiConstants.baseUrl);
+  final storageService = AdminStorageService();
+
+  var dataList = <BlogModel>[].obs;
+  var filteredDataList = <BlogModel>[].obs;
+  final searchController = TextEditingController();
 
   @override
   void onInit() {
     super.onInit();
-    // Load initial data
-    loadData();
+    fetchBlog();
   }
 
-  Future<void> loadData() async {
+  void fetchBlog() async {
     try {
       isLoading.value = true;
-      // TODO: Replace with actual API call
-      await Future.delayed(const Duration(seconds: 1));
-      
-      // Mock data
-      dataList.assignAll([
-        BlogModel(
-          id: 1,
-          title: 'Getting Started with Flutter',
-          subtitle: 'A beginner\'s guide to Flutter',
-          date: DateTime.now().subtract(const Duration(days: 5)),
-          isFeatured: true,
-          content: 'Full blog content here...',
-          coverImage: 'https://example.com/cover1.jpg',
-          mainImage: 'https://example.com/main1.jpg',
-          quote: 'Flutter is amazing!',
-          authorName: 'John Doe',
-        ),
-        // Add more mock data as needed
-      ]);
-      
-      filterData();
+
+      final isConnected = await NetworkManager.instance.isConnected();
+      log(isConnected.toString());
+      if (!isConnected) {
+        AdminLoaders.errorSnackBar(
+          title: "No Internet Connection",
+          message: "Please check your internet connection and try again.",
+          // message: "Something went wrong. Please try again.",
+        );
+        return;
+      }
+
+      final response = await apiService.get(
+        path: ApiConstants.blog,
+        headers: {"authorization": storageService.token!},
+        decoder: (json) {
+          final data = json['data']['blog_data'] as List;
+          return data.map<BlogModel>((e) => BlogModel.fromJson(e)).toList();
+        },
+      );
+
+      dataList.assignAll(response);
+      filteredDataList.assignAll(dataList);
+    } catch (e) {
+      log(e.toString());
+      AdminLoaders.errorSnackBar(
+        title: "Error",
+        message: "Something went wrong. Please try again.",
+      );
     } finally {
       isLoading.value = false;
     }
   }
 
-  void filterData() {
-    if (searchText.value.isEmpty) {
-      filteredDataList.assignAll(dataList);
-    } else {
-      filteredDataList.assignAll(
-        dataList.where((blog) =>
-          blog.title.toLowerCase().contains(searchText.value.toLowerCase()) ||
-          (blog.subtitle?.toLowerCase().contains(searchText.value.toLowerCase()) ?? false) ||
-          blog.authorName.toLowerCase().contains(searchText.value.toLowerCase())),
+  void searchQuery(String query) {
+    final q = query.toLowerCase();
+    filteredDataList.assignAll(
+      dataList.where((e) => e.title.toLowerCase().contains(q)),
+    );
+  }
+
+  void deleteItem(String id) async {
+    try {
+      isLoading.value = true;
+
+      final response = await apiService.delete(
+        path: "${ApiConstants.blogDelete}/$id",
+        headers: {"authorization": storageService.token!},
+        decoder: (json) {
+          return json as Map<String, dynamic>;
+        },
       );
-    }
-    sortData();
-  }
 
-  void sortData() {
-    filteredDataList.sort((a, b) {
-      int compareResult;
-      switch (sortColumn.value) {
-        case 'title':
-          compareResult = a.title.compareTo(b.title);
-          break;
-        case 'date':
-          compareResult = a.date.compareTo(b.date);
-          break;
-        case 'author':
-          compareResult = a.authorName.compareTo(b.authorName);
-          break;
-        default:
-          compareResult = a.title.compareTo(b.title);
+      if (response['status'] == 200) {
+        fetchBlog();
+        AdminLoaders.successSnackBar(
+          title: "Success",
+          message: "Blog deleted successfully.",
+        );
       }
-      return sortAscending.value ? compareResult : -compareResult;
-    });
-  }
-
-  void onSort(String columnName, bool ascending) {
-    sortColumn.value = columnName;
-    sortAscending.value = ascending;
-    sortData();
-  }
-
-  Future<void> deleteItem(int id) async {
-    // TODO: Implement delete functionality
-    dataList.removeWhere((blog) => blog.id == id);
-    filterData();
-  }
-
-  Future<void> toggleFeatured(int id, bool isFeatured) async {
-    // TODO: Implement toggle featured status
-    final index = dataList.indexWhere((blog) => blog.id == id);
-    if (index != -1) {
-      final blog = dataList[index];
-      dataList[index] = blog.copyWith(isFeatured: isFeatured);
-      filterData();
+    } catch (e) {
+      log(e.toString());
+      AdminLoaders.errorSnackBar(
+        title: "Error",
+        message: "Something went wrong. Please try again.",
+      );
+    } finally {
+      isLoading.value = false;
     }
+  }
+
+  @override
+  void onClose() {
+    searchController.dispose();
+    super.onClose();
   }
 }

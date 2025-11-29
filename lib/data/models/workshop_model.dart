@@ -1,101 +1,93 @@
 class WorkshopModel {
-  final int id;
-  final String name;
-  final String? description;
-  final String image;
-  final String instructor;
-  final DateTime startDate;
-  final DateTime endDate;
-  final int maxParticipants;
-  final int currentParticipants;
-  final bool isFeatured;
-  final double price;
-  final String? location;
-  final String? category;
+  String id;
+  String image;
+  String title;
+  List<dynamic> workshopCurriculum;
+  List<dynamic> workshopTestimonials;
+  List<dynamic> workshopFaq;
+  double price;
+  double mrpPrice;
+  String language;
+  String duration;
+  bool isDeleted;
+  bool isBlocked;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String? subTitle;
+  String? about;
+  String? pdfAttach;
+  String? couponCode;
+  String? validFor;
 
   WorkshopModel({
     required this.id,
-    required this.name,
-    this.description,
     required this.image,
-    required this.instructor,
-    required this.startDate,
-    required this.endDate,
-    required this.maxParticipants,
-    this.currentParticipants = 0,
-    this.isFeatured = false,
-    this.price = 0.0,
-    this.location,
-    this.category,
+    required this.title,
+    required this.workshopCurriculum,
+    required this.workshopTestimonials,
+    required this.workshopFaq,
+    required this.price,
+    required this.mrpPrice,
+    required this.language,
+    required this.duration,
+    required this.isDeleted,
+    required this.isBlocked,
+    required this.createdAt,
+    required this.updatedAt,
+    this.subTitle,
+    this.about,
+    this.pdfAttach,
+    this.couponCode,
+    this.validFor,
   });
 
-  // Add fromJson and toJson methods if needed for API integration
-  factory WorkshopModel.fromJson(Map<String, dynamic> json) {
-    return WorkshopModel(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      image: json['image'],
-      instructor: json['instructor'],
-      startDate: DateTime.parse(json['startDate']),
-      endDate: DateTime.parse(json['endDate']),
-      maxParticipants: json['maxParticipants'],
-      currentParticipants: json['currentParticipants'] ?? 0,
-      isFeatured: json['isFeatured'] ?? false,
-      price: (json['price'] ?? 0).toDouble(),
-      location: json['location'],
-      category: json['category'],
-    );
-  }
+  factory WorkshopModel.fromJson(Map<String, dynamic> json) => WorkshopModel(
+    id: json["_id"],
+    image: json["image"],
+    title: json["title"],
+    workshopCurriculum: List<dynamic>.from(
+      json["workshopCurriculum"].map((x) => x),
+    ),
+    workshopTestimonials: List<dynamic>.from(
+      json["workshopTestimonials"].map((x) => x),
+    ),
+    workshopFaq: List<dynamic>.from(json["workshopFAQ"].map((x) => x)),
+    price: json["price"]?.toDouble(),
+    mrpPrice: json["mrpPrice"]?.toDouble(),
+    language: json["language"],
+    duration: json["duration"],
+    isDeleted: json["isDeleted"],
+    isBlocked: json["isBlocked"],
+    createdAt: DateTime.parse(json["createdAt"]),
+    updatedAt: DateTime.parse(json["updatedAt"]),
+    subTitle: json["subTitle"],
+    about: json["about"],
+    pdfAttach: json["pdfAttach"],
+    couponCode: json["couponCode"],
+    validFor: json["validFor"],
+  );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'description': description,
-      'image': image,
-      'instructor': instructor,
-      'startDate': startDate.toIso8601String(),
-      'endDate': endDate.toIso8601String(),
-      'maxParticipants': maxParticipants,
-      'currentParticipants': currentParticipants,
-      'isFeatured': isFeatured,
-      'price': price,
-      'location': location,
-      'category': category,
-    };
-  }
-
-  // Create a copyWith method for immutability
-  WorkshopModel copyWith({
-    int? id,
-    String? name,
-    String? description,
-    String? image,
-    String? instructor,
-    DateTime? startDate,
-    DateTime? endDate,
-    int? maxParticipants,
-    int? currentParticipants,
-    bool? isFeatured,
-    double? price,
-    String? location,
-    String? category,
-  }) {
-    return WorkshopModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      image: image ?? this.image,
-      instructor: instructor ?? this.instructor,
-      startDate: startDate ?? this.startDate,
-      endDate: endDate ?? this.endDate,
-      maxParticipants: maxParticipants ?? this.maxParticipants,
-      currentParticipants: currentParticipants ?? this.currentParticipants,
-      isFeatured: isFeatured ?? this.isFeatured,
-      price: price ?? this.price,
-      location: location ?? this.location,
-      category: category ?? this.category,
-    );
-  }
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "image": image,
+    "title": title,
+    "workshopCurriculum": List<dynamic>.from(workshopCurriculum.map((x) => x)),
+    "workshopTestimonials": List<dynamic>.from(
+      workshopTestimonials.map((x) => x),
+    ),
+    "workshopFAQ": List<dynamic>.from(workshopFaq.map((x) => x)),
+    "price": price,
+    "mrpPrice": mrpPrice,
+    "language": language,
+    "duration": duration,
+    "isDeleted": isDeleted,
+    "isBlocked": isBlocked,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+    "subTitle": subTitle,
+    "about": about,
+    "pdfAttach": pdfAttach,
+    "couponCode": couponCode,
+    "validFor": validFor,
+  };
 }

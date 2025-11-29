@@ -27,6 +27,7 @@ class EditBannerForm extends GetView<EditBannerController> {
           width: 700,
           padding: EdgeInsets.all(AdminSizes.defaultSpace),
           child: Form(
+            key: controller.editBannerFormKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -45,12 +46,19 @@ class EditBannerForm extends GetView<EditBannerController> {
                       prefixIcon: Icon(Iconsax.category),
                     ),
                     items: const [
-                      DropdownMenuItem(value: BannerType.web, child: Text('Web')),
-                      DropdownMenuItem(value: BannerType.app, child: Text('App')),
+                      DropdownMenuItem(
+                        value: BannerType.web,
+                        child: Text('Web'),
+                      ),
+                      DropdownMenuItem(
+                        value: BannerType.app,
+                        child: Text('App'),
+                      ),
                     ],
-                    onChanged: (val) {
-                      if (val != null) controller.type.value = val;
-                    },
+                    onChanged: null,
+                    // onChanged: (val) {
+                    //   if (val != null) controller.type.value = val;
+                    // },
                   ),
                 ),
                 SizedBox(height: AdminSizes.spaceBtwInputFields),
@@ -62,7 +70,8 @@ class EditBannerForm extends GetView<EditBannerController> {
                       children: [
                         TextFormField(
                           controller: controller.titleController,
-                          validator: (v) => AdminValidators.validateEmptyText('Title', v),
+                          validator: (v) =>
+                              AdminValidators.validateEmptyText('Title', v),
                           decoration: const InputDecoration(
                             labelText: 'Title',
                             prefixIcon: Icon(Iconsax.text),
@@ -92,7 +101,8 @@ class EditBannerForm extends GetView<EditBannerController> {
                                   image: controller.imagePrimary.value.isEmpty
                                       ? AdminImages.defaultImage
                                       : controller.imagePrimary.value,
-                                  imageType: controller.imagePrimary.value.isEmpty
+                                  imageType:
+                                      controller.imagePrimary.value.isEmpty
                                       ? ImageType.asset
                                       : ImageType.network,
                                   onIconButtonPressed: controller.onPickPrimary,
@@ -108,10 +118,12 @@ class EditBannerForm extends GetView<EditBannerController> {
                                   image: controller.imageSecondary.value.isEmpty
                                       ? AdminImages.defaultImage
                                       : controller.imageSecondary.value,
-                                  imageType: controller.imageSecondary.value.isEmpty
+                                  imageType:
+                                      controller.imageSecondary.value.isEmpty
                                       ? ImageType.asset
                                       : ImageType.network,
-                                  onIconButtonPressed: controller.onPickSecondary,
+                                  onIconButtonPressed:
+                                      controller.onPickSecondary,
                                 ),
                               ),
                             ],
@@ -130,7 +142,8 @@ class EditBannerForm extends GetView<EditBannerController> {
                       children: [
                         TextFormField(
                           controller: controller.linkController,
-                          validator: (v) => AdminValidators.validateEmptyText('Link', v),
+                          validator: (v) =>
+                              AdminValidators.validateEmptyText('Link', v),
                           decoration: const InputDecoration(
                             labelText: 'Link',
                             prefixIcon: Icon(Iconsax.link),
@@ -151,7 +164,8 @@ class EditBannerForm extends GetView<EditBannerController> {
                                   image: controller.imagePrimary.value.isEmpty
                                       ? AdminImages.defaultImage
                                       : controller.imagePrimary.value,
-                                  imageType: controller.imagePrimary.value.isEmpty
+                                  imageType:
+                                      controller.imagePrimary.value.isEmpty
                                       ? ImageType.asset
                                       : ImageType.network,
                                   onIconButtonPressed: controller.onPickPrimary,
@@ -167,11 +181,17 @@ class EditBannerForm extends GetView<EditBannerController> {
                 }),
 
                 SizedBox(height: AdminSizes.spaceBtwInputFields * 2),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => controller.updateItem(item),
-                    child: const Text('Update'),
+                Obx(
+                  () => SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => controller.isLoading.value
+                          ? null
+                          : controller.updateItem(item),
+                      child: controller.isLoading.value
+                          ? const CircularProgressIndicator()
+                          : const Text('Update'),
+                    ),
                   ),
                 ),
               ],

@@ -29,7 +29,7 @@ class CourseCreateFaqController extends GetxController {
           "question": questionController.text,
           "answer": answerController.text,
           "isFeatured": isFeatured.value,
-          "type": FaqType.course.name,
+          "type": DashType.course.name,
         },
         decoder: (json) {},
       );

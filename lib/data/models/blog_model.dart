@@ -1,83 +1,67 @@
-import 'package:flutter/material.dart';
-
 class BlogModel {
-  final int id;
-  final String title;
-  final String? subtitle;
-  final DateTime date;
-  final bool isFeatured;
-  final String content;
-  final String coverImage;
-  final String mainImage;
-  final String? quote;
-  final String authorName;
+  String id;
+  String title;
+  String? subTitle;
+  String content;
+  String category;
+  String coverImage;
+  String mainImage;
+  String author;
+  bool isFeatured;
+  bool isDeleted;
+  bool isBlocked;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String? quote;
 
   BlogModel({
     required this.id,
     required this.title,
-    this.subtitle,
-    required this.date,
-    this.isFeatured = false,
+    required this.subTitle,
     required this.content,
+    required this.category,
     required this.coverImage,
     required this.mainImage,
+    required this.author,
+    required this.isFeatured,
+    required this.isDeleted,
+    required this.isBlocked,
+    required this.createdAt,
+    required this.updatedAt,
     this.quote,
-    required this.authorName,
   });
 
-  BlogModel copyWith({
-    int? id,
-    String? title,
-    String? subtitle,
-    DateTime? date,
-    bool? isFeatured,
-    String? content,
-    String? coverImage,
-    String? mainImage,
-    String? quote,
-    String? authorName,
-  }) {
-    return BlogModel(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      subtitle: subtitle ?? this.subtitle,
-      date: date ?? this.date,
-      isFeatured: isFeatured ?? this.isFeatured,
-      content: content ?? this.content,
-      coverImage: coverImage ?? this.coverImage,
-      mainImage: mainImage ?? this.mainImage,
-      quote: quote ?? this.quote,
-      authorName: authorName ?? this.authorName,
-    );
-  }
+  factory BlogModel.fromJson(Map<String, dynamic> json) => BlogModel(
+    id: json["_id"],
+    title: json["title"],
+    subTitle: json["subTitle"],
+    content: json["content"],
+    category: json["category"],
+    coverImage: json["coverImage"],
+    mainImage: json["mainImage"],
+    author: json["author"],
+    isFeatured: json["isFeatured"],
+    isDeleted: json["isDeleted"],
+    isBlocked: json["isBlocked"],
+    createdAt: DateTime.parse(json["createdAt"]),
+    updatedAt: DateTime.parse(json["updatedAt"]),
+    quote: json["quote"],
+  );
 
-  factory BlogModel.fromJson(Map<String, dynamic> json) {
-    return BlogModel(
-      id: json['id'] as int,
-      title: json['title'] as String,
-      subtitle: json['subtitle'] as String?,
-      date: DateTime.parse(json['date'] as String),
-      isFeatured: json['isFeatured'] as bool? ?? false,
-      content: json['content'] as String,
-      coverImage: json['coverImage'] as String,
-      mainImage: json['mainImage'] as String,
-      quote: json['quote'] as String?,
-      authorName: json['authorName'] as String,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'subtitle': subtitle,
-      'date': date.toIso8601String(),
-      'isFeatured': isFeatured,
-      'content': content,
-      'coverImage': coverImage,
-      'mainImage': mainImage,
-      'quote': quote,
-      'authorName': authorName,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "title": title,
+    "subTitle": subTitle,
+    "content": content,
+    "category": category,
+    "coverImage": coverImage,
+    "mainImage": mainImage,
+    "author": author,
+    "isFeatured": isFeatured,
+    "isDeleted": isDeleted,
+    "isBlocked": isBlocked,
+    "createdAt": createdAt.toIso8601String(),
+    "updatedAt": updatedAt.toIso8601String(),
+    "quote": quote,
+  };
 }

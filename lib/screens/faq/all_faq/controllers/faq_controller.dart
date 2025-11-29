@@ -35,7 +35,7 @@ class FaqController extends GetxController {
 
       final response = await apiService.get(
         headers: {"authorization": storageService.token!},
-        path: ApiConstants.faqWithType(FaqType.home),
+        path: ApiConstants.faqWithType(DashType.home),
         decoder: (json) {
           final data = json['data']['faq_data'] as List;
           return data.map<FaqModel>((e) => FaqModel.fromJson(e)).toList();
@@ -91,7 +91,7 @@ class FaqController extends GetxController {
     try {
       final response = await apiService.delete(
         path: "${ApiConstants.faqDelete}/$id",
-        headers: {"token": storageService.token!},
+        headers: {"Authorization": storageService.token!},
         decoder: (json) {},
       );
       AdminLoaders.successSnackBar(

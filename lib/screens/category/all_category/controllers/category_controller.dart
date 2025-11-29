@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hkdigiskill_admin/common/widgets/loaders/loaders.dart';
@@ -76,9 +78,29 @@ class CategoryController extends GetxController {
     });
   }
 
-  void deleteCategory(String id) {
-    dataList.removeWhere((category) => category.id == id);
-    filteredDataList.removeWhere((category) => category.id == id);
+  void deleteCategory(String id) async {
+    try {
+      final response = await apiService.delete(
+        path: "${ApiConstants.categoryDelete}/$id",
+        headers: {"Authorization": storageService.token!},
+        decoder: (json) => json as Map<String, dynamic>,
+      );
+
+      if (response['status'] == 200) {
+        fetchCategories();
+        AdminLoaders.successSnackBar(
+          title: "Category",
+          message: "Deleted successfully",
+        );
+      }
+    } catch (e) {
+      log(e.toString());
+      AdminLoaders.errorSnackBar(
+        title: "Error",
+        message: e.toString(),
+        // message: "Something went wrong. Please try again.",
+      );
+    }
   }
 
   void searchQuery(String query) {

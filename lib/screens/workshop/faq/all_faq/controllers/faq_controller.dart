@@ -35,7 +35,7 @@ class WorkshopFaqController extends GetxController {
 
       final response = await apiService.get(
         headers: {"authorization": storageService.token!},
-        path: ApiConstants.faqWithType(FaqType.workshop),
+        path: ApiConstants.faqWithType(DashType.workshop),
         decoder: (json) {
           final data = json['data']['faq_data'] as List;
           return data.map<FaqModel>((e) => FaqModel.fromJson(e)).toList();

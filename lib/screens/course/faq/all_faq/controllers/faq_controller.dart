@@ -35,7 +35,7 @@ class CourseFaqController extends GetxController {
 
       final response = await apiService.get(
         headers: {"authorization": storageService.token!},
-        path: ApiConstants.faqWithType(FaqType.course),
+        path: ApiConstants.faqWithType(DashType.course),
         decoder: (json) {
           final data = json['data']['faq_data'] as List;
           return data.map<FaqModel>((e) => FaqModel.fromJson(e)).toList();

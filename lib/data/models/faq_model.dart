@@ -5,7 +5,7 @@ class FaqModel {
   String question;
   String answer;
   bool isFeatured;
-  FaqType type;
+  DashType type;
   bool? isDeleted;
   bool? isBlocked;
   DateTime? createdAt;
@@ -28,7 +28,7 @@ class FaqModel {
     String? question,
     String? answer,
     bool? isFeatured,
-    FaqType? type,
+    DashType? type,
     bool? isDeleted,
     bool? isBlocked,
     DateTime? createdAt,
@@ -51,7 +51,7 @@ class FaqModel {
     answer: json["answer"],
     isFeatured: json["isFeatured"],
     type: json["type"] == null
-        ? FaqType.home
+        ? DashType.home
         : FaqTypeExtension.fromString(json["type"]),
     isDeleted: json["isDeleted"],
     isBlocked: json["isBlocked"],
@@ -76,17 +76,17 @@ class FaqModel {
   };
 }
 
-extension FaqTypeExtension on FaqType {
-  static FaqType fromString(String value) {
+extension FaqTypeExtension on DashType {
+  static DashType fromString(String value) {
     switch (value.toLowerCase()) {
       case 'course':
-        return FaqType.course;
+        return DashType.course;
       case 'workshop':
-        return FaqType.workshop;
+        return DashType.workshop;
       case 'home':
-        return FaqType.home;
+        return DashType.home;
       default:
-        return FaqType.home; // fallback
+        return DashType.home; // fallback
     }
   }
 

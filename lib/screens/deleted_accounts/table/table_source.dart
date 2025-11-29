@@ -1,7 +1,6 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:hkdigiskill_admin/common/widgets/data_table/table_action_icon_buttons.dart';
-import 'package:hkdigiskill_admin/common/widgets/dialogs/confirm_dialog.dart';
 import 'package:hkdigiskill_admin/screens/deleted_accounts/controllers/deleted_accounts_controller.dart';
 import 'package:intl/intl.dart';
 
@@ -16,9 +15,8 @@ class AccountsDataSource extends DataTableSource {
 
     return DataRow2(
       cells: [
-        DataCell(Text(account.name)),
+        DataCell(Text(account.userId.fullName)),
         DataCell(Text(account.email)),
-        DataCell(Text(account.password)),
         DataCell(Text(account.reason)),
         DataCell(Text(account.rate.toString())),
         DataCell(
@@ -28,15 +26,15 @@ class AccountsDataSource extends DataTableSource {
             view: true,
             onEditPressed: () {},
             onViewPressed: () {},
-            onDeletePressed: () {
-              // Show confirmation dialog before deleting
-              ConfirmDialog.show(
-                title: "Delete Workshop",
-                message: "Are you sure you want to delete this workshop?",
-                iconColor: Colors.red,
-                onConfirm: () => controller.deleteAccount(account.id),
-              );
-            },
+            // onDeletePressed: () {
+            //   // Show confirmation dialog before deleting
+            //   ConfirmDialog.show(
+            //     title: "Delete Workshop",
+            //     message: "Are you sure you want to delete this workshop?",
+            //     iconColor: Colors.red,
+            //     onConfirm: () => controller.deleteAccount(account.id),
+            //   );
+            // },
           ),
         ),
       ],

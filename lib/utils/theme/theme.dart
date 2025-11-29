@@ -143,6 +143,20 @@ class AdminTheme {
       fillColor: AdminColors.white,
       filled: true,
     ),
+    dropdownMenuTheme: DropdownMenuThemeData(
+      menuStyle: MenuStyle(
+        elevation: const WidgetStatePropertyAll(4),
+        backgroundColor: WidgetStatePropertyAll(Colors.white),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AdminSizes.borderRadiusLg),
+          ),
+        ),
+        padding: const WidgetStatePropertyAll(
+          EdgeInsets.symmetric(vertical: 6),
+        ),
+      ),
+    ),
     cardColor: AdminColors.white,
     dividerColor: AdminColors.grey,
     snackBarTheme: SnackBarThemeData(
@@ -292,6 +306,20 @@ class AdminTheme {
       labelStyle: TextStyle(color: AdminColors.lightGrey),
       fillColor: AdminColors.darkContainer,
       filled: true,
+    ),
+    dropdownMenuTheme: DropdownMenuThemeData(
+      menuStyle: MenuStyle(
+        elevation: const WidgetStatePropertyAll(4),
+        backgroundColor: WidgetStatePropertyAll(Colors.white),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AdminSizes.borderRadiusLg),
+          ),
+        ),
+        padding: const WidgetStatePropertyAll(
+          EdgeInsets.symmetric(vertical: 6),
+        ),
+      ),
     ),
     cardColor: AdminColors.darkContainer,
     dividerColor: AdminColors.darkerGrey,

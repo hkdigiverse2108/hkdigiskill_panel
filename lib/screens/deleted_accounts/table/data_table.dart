@@ -1,9 +1,11 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hkdigiskill_admin/common/widgets/animations/animation_loader.dart';
 import 'package:hkdigiskill_admin/common/widgets/data_table/paginated_data_table.dart';
 import 'package:hkdigiskill_admin/screens/deleted_accounts/controllers/deleted_accounts_controller.dart';
 import 'package:hkdigiskill_admin/screens/deleted_accounts/table/table_source.dart';
+import 'package:hkdigiskill_admin/utils/constants/image_strings.dart';
 import 'package:hkdigiskill_admin/utils/constants/sizes.dart';
 
 class AccountsTable extends StatelessWidget {
@@ -14,6 +16,16 @@ class AccountsTable extends StatelessWidget {
     final controller = DeletedAccountsController.instance;
 
     return Obx(() {
+      if (controller.isLoading.value) {
+        return Center(
+          child: AdminAnimationLoaderWidget(
+            text: 'Loading...',
+            animation: AdminImages.loadingAnimation,
+            height: 200,
+            width: 200,
+          ),
+        );
+      }
       Visibility(
         visible: false,
         child: Text(controller.filteredDataList.length.toString()),
@@ -33,13 +45,6 @@ class AccountsTable extends StatelessWidget {
             onSort: (columnIndex, ascending) {
               controller.sort(columnIndex, ascending);
             },
-          ),
-          DataColumn2(
-            label: const Text("Password"),
-            onSort: (columnIndex, ascending) {
-              controller.sort(columnIndex, ascending);
-            },
-            size: ColumnSize.L,
           ),
           const DataColumn2(label: Text("Reason")),
           const DataColumn2(label: Text("Rate")),

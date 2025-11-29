@@ -1,8 +1,10 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hkdigiskill_admin/common/widgets/data_table/table_action_icon_buttons.dart';
 import 'package:hkdigiskill_admin/common/widgets/dialogs/confirm_dialog.dart';
 import 'package:hkdigiskill_admin/common/widgets/images/rounded_image.dart';
+import 'package:hkdigiskill_admin/routes/routes.dart';
 import 'package:hkdigiskill_admin/screens/our_trusted_partners/all_partners/controllers/all_partners_controller.dart';
 import 'package:hkdigiskill_admin/utils/constants/colors.dart';
 import 'package:hkdigiskill_admin/utils/constants/enums.dart';
@@ -16,14 +18,14 @@ class AllPartnersDataSource extends DataTableSource {
 
   @override
   DataRow? getRow(int index) {
-    final workshop = controller.filteredDataList[index];
+    final partner = controller.filteredDataList[index];
 
     return DataRow2(
       cells: [
         DataCell(
           AdminRoundedImage(
             imageType: ImageType.network,
-            image: workshop.image,
+            image: partner.image,
             width: 50,
             height: 50,
             padding: AdminSizes.sm,
@@ -31,8 +33,8 @@ class AllPartnersDataSource extends DataTableSource {
             backgroundColor: AdminColors.primaryBackground,
           ),
         ),
-        DataCell(Text(workshop.name)),
-        DataCell(Text(workshop.description)),
+        DataCell(Text(partner.name)),
+        DataCell(Text(partner.description ?? "")),
 
         // Status & Actions
         DataCell(
@@ -40,7 +42,9 @@ class AllPartnersDataSource extends DataTableSource {
             edit: true,
             delete: true,
             // view: true,
-            onEditPressed: () {},
+            onEditPressed: () {
+              Get.toNamed(AdminRoutes.editPartners, arguments: partner);
+            },
             // onViewPressed: () {},
             onDeletePressed: () {
               // Show confirmation dialog before deleting
@@ -48,7 +52,7 @@ class AllPartnersDataSource extends DataTableSource {
                 title: "Delete Partner",
                 message: "Are you sure you want to delete this partner?",
                 iconColor: Colors.red,
-                onConfirm: () => controller.deleteWorkshop(workshop.id),
+                onConfirm: () => controller.deletePartner(partner.id),
               );
             },
           ),

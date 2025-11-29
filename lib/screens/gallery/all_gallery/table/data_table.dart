@@ -39,8 +39,10 @@ class GalleryTable extends StatelessWidget {
         onPageChanged: (page) {},
         source: GalleryDataSource(),
         columns: const [
-          DataColumn2(label: Text('Title'), fixedWidth: 150),
+          DataColumn2(label: Text('Title')),
           DataColumn2(label: Text('Images')),
+          DataColumn2(label: Text('Description')),
+          DataColumn2(label: Text('Created At')),
           DataColumn2(label: Text('Actions'), fixedWidth: 120),
         ],
       );

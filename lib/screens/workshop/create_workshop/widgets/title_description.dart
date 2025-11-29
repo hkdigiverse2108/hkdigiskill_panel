@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hkdigiskill_admin/common/widgets/containers/rounded_container.dart';
+import 'package:hkdigiskill_admin/screens/workshop/create_workshop/controllers/create_workshop_controller.dart';
 import 'package:hkdigiskill_admin/utils/constants/sizes.dart';
 import 'package:hkdigiskill_admin/utils/helpers/validators.dart';
 
@@ -9,8 +10,10 @@ class WorkshopTitleAndDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = CreateWorkshopController.instance;
     return AdminRoundedContainer(
       child: Form(
+        key: controller.titleSectionForm,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -26,12 +29,16 @@ class WorkshopTitleAndDescription extends StatelessWidget {
               validator: (value) =>
                   AdminValidators.validateEmptyText("title", value),
               decoration: const InputDecoration(labelText: "Workshop Title"),
+              controller: controller.titleController,
             ),
             const Gap(AdminSizes.spaceBtwInputFields),
 
             // workshop subtitle
             TextFormField(
-              decoration: const InputDecoration(labelText: "Workshop SubTitle"),
+              decoration: const InputDecoration(
+                labelText: "Workshop SubTitle (Optional)",
+              ),
+              controller: controller.subtitleController,
             ),
             const Gap(AdminSizes.spaceBtwInputFields),
 
@@ -39,13 +46,14 @@ class WorkshopTitleAndDescription extends StatelessWidget {
             SizedBox(
               height: 200,
               child: TextFormField(
+                controller: controller.descriptionController,
                 expands: true,
                 maxLines: null,
                 textAlign: TextAlign.start,
                 keyboardType: TextInputType.multiline,
                 textAlignVertical: TextAlignVertical.top,
                 decoration: InputDecoration(
-                  labelText: "Description",
+                  labelText: "Description (Optional)",
                   hintText: "Add Workshop Description here...",
                   alignLabelWithHint: true,
                 ),
